@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="chechia.tn.controllers.CommentaireController" spacing="10" styleClass="content-container">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <TextArea fx:id="contenuTextArea" promptText="Votre commentaire..." wrapText="true" prefRowCount="3"/>
+    
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Ajouter" onAction="#handleAjouterCommentaire" styleClass="btn-primary"/>
+        <Button text="Modifier" onAction="#handleModifierCommentaire" styleClass="btn-secondary"/>
+        <Button text="Supprimer" onAction="#handleSupprimerCommentaire" styleClass="btn-danger"/>
+    </HBox>
+    
+    <ListView fx:id="commentaireListView" VBox.vgrow="ALWAYS"/>
+</VBox>
