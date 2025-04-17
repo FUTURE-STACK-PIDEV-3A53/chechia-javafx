@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chechia.tn.controllers.BackController" styleClass="main-container">
+    <stylesheets>
+        <URL value="@styles.css"/>
+    </stylesheets>
+    
+    <top>
+        <VBox>
+            <HBox styleClass="nav-bar" spacing="15" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets top="15" right="25" bottom="15" left="25"/>
+                </padding>
+                <Label text="Administration" styleClass="app-title"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <TabPane>
+            <Tab text="Posts" closable="false">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Liste des posts" styleClass="section-title">
+                            <font>
+                                <Font name="System Bold" size="18"/>
+                            </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                    <TableView fx:id="postTableView" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="postTitreColumn" text="Titre" prefWidth="200"/>
+                            <TableColumn fx:id="postContenuColumn" text="Contenu" prefWidth="300"/>
+                            <TableColumn fx:id="postDateColumn" text="Date" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+            
+            <Tab text="Commentaires" closable="false">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Liste des commentaires" styleClass="section-title">
+                            <font>
+                                <Font name="System Bold" size="18"/>
+                            </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                    <TableView fx:id="commentaireTableView" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="commentaireContenuColumn" text="Contenu" prefWidth="400"/>
+                            <TableColumn fx:id="commentaireDateColumn" text="Date" prefWidth="150"/>
+                            <TableColumn fx:id="commentairePostIdColumn" text="ID Post" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

@@ -87,8 +87,14 @@ public class CommentaireController {
     
     @FXML
     private void handleModifierCommentaire() {
-        if (selectedCommentaire != null && currentPostId > 0) {
-            selectedCommentaire.setContenu(contenuTextArea.getText().trim());
+        String contenu = contenuTextArea.getText().trim();
+        if (selectedCommentaire == null) {
+            afficherErreur("Aucun commentaire n'est sélectionné");
+            return;
+        }
+        
+        if (validerCommentaire(contenu)) {
+            selectedCommentaire.setContenu(contenu);
             selectedCommentaire.setDate_commentaire(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             
             try {
@@ -97,18 +103,32 @@ public class CommentaireController {
                 selectedCommentaire = null;
                 refreshCommentaires();
             } catch (Exception e) {
-                System.out.println("Erreur lors de la modification du commentaire: " + e.getMessage());
+                afficherErreur("Erreur lors de la modification du commentaire: " + e.getMessage());
             }
         }
     }
     
     @FXML
     private void handleSupprimerCommentaire() {
-        if (selectedCommentaire != null) {
-            commentaireService.supprimer(selectedCommentaire.getId());
-            contenuTextArea.clear();
-            selectedCommentaire = null;
-            refreshCommentaires();
+        if (selectedCommentaire == null) {
+            afficherErreur("Aucun commentaire n'est sélectionné");
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de suppression");
+        alert.setHeaderText(null);
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer ce commentaire ?");
+
+        if (alert.showAndWait().get().getButtonData().isDefaultButton()) {
+            try {
+                commentaireService.supprimer(selectedCommentaire.getId());
+                contenuTextArea.clear();
+                selectedCommentaire = null;
+                refreshCommentaires();
+            } catch (Exception e) {
+                afficherErreur("Erreur lors de la suppression du commentaire: " + e.getMessage());
+            }
         }
     }
     

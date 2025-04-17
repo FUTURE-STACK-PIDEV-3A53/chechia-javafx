@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Alert;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
@@ -77,21 +78,54 @@ public class PostController {
         }
     }
     
+    private void afficherErreur(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur de validation");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private boolean validerPost(String titre, String contenu) {
+        if (titre.isEmpty()) {
+            afficherErreur("Le titre ne peut pas être vide");
+            return false;
+        }
+        if (titre.length() < 3) {
+            afficherErreur("Le titre doit contenir au moins 3 caractères");
+            return false;
+        }
+        if (contenu.isEmpty()) {
+            afficherErreur("Le contenu ne peut pas être vide");
+            return false;
+        }
+        if (contenu.length() < 10) {
+            afficherErreur("Le contenu doit contenir au moins 10 caractères");
+            return false;
+        }
+        return true;
+    }
+
     @FXML
     private void handleModifierPost() {
-        if (selectedPost != null) {
-            String titre = titreTextField.getText().trim();
-            String contenu = contenuTextArea.getText().trim();
+        if (selectedPost == null) {
+            afficherErreur("Aucun post n'est sélectionné");
+            return;
+        }
+
+        String titre = titreTextField.getText().trim();
+        String contenu = contenuTextArea.getText().trim();
+        
+        if (validerPost(titre, contenu)) {
+            Post postModifie = new Post();
+            postModifie.setId(selectedPost.getId());
+            postModifie.setTitre(titre);
+            postModifie.setContenu(contenu);
+            postModifie.setImage(imageTextField.getText().trim());
+            postModifie.setVideo(videoTextField.getText().trim());
+            postModifie.setDate_post(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             
-            if (!titre.isEmpty() && !contenu.isEmpty()) {
-                Post postModifie = new Post();
-                postModifie.setId(selectedPost.getId());
-                postModifie.setTitre(titre);
-                postModifie.setContenu(contenu);
-                postModifie.setImage(imageTextField.getText().trim());
-                postModifie.setVideo(videoTextField.getText().trim());
-                postModifie.setDate_post(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                
+            try {
                 postService.modifier(postModifie);
                 refreshPosts();
                 
@@ -102,6 +136,8 @@ public class PostController {
                         break;
                     }
                 }
+            } catch (Exception e) {
+                afficherErreur("Erreur lors de la modification du post: " + e.getMessage());
             }
         }
     }

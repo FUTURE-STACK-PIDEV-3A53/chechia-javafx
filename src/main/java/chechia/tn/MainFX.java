@@ -15,15 +15,17 @@ public class MainFX extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainFX.class.getResource("/chechia/tn/front.fxml"));
+            if (fxmlLoader.getLocation() == null) {
+                throw new IOException("Le fichier FXML n'a pas été trouvé");
+            }
             Scene scene = new Scene(fxmlLoader.load());
-            // Explicitly add the stylesheet to the scene
             String css = MainFX.class.getResource("/chechia/tn/styles.css").toExternalForm();
             scene.getStylesheets().add(css);
             stage.setScene(scene);
-            stage.setTitle("Gestion des Posts");
+            stage.setTitle("Administration des Posts");
             stage.show();
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "❌ Erreur de chargement FXML", e);
+            LOGGER.log(Level.SEVERE, "❌ Erreur de chargement FXML: " + e.getMessage(), e);
         }
     }
 
