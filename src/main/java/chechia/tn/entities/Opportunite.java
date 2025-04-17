@@ -1,13 +1,14 @@
 package chechia.tn.entities;
 
-import java.util.Date;
-
 public class Opportunite {
     private String titre;
     private String description;
-    private  int exp_years; // Utilisation de Date pour l'année d'expérience
+    private int exp_years;
     private String lieu;
     private Type type;
+
+    // Ajout du champ id
+    private int id; // Ajouter le champ id ici
 
     // Enum pour "type"
     public enum Type {
@@ -15,7 +16,6 @@ public class Opportunite {
 
         @Override
         public String toString() {
-            // Affiche la première lettre en majuscule et le reste en minuscule
             return name().charAt(0) + name().substring(1).toLowerCase();
         }
 
@@ -28,7 +28,8 @@ public class Opportunite {
             throw new IllegalArgumentException("Type inconnu : " + label);
         }
     }
-    // Constructeur complet
+
+    // Constructeur sans id
     public Opportunite(String titre, String description, int exp_years, String lieu, Type type) {
         this.titre = titre;
         this.description = description;
@@ -37,7 +38,22 @@ public class Opportunite {
         this.type = type;
     }
 
-    // Getters et Setters
+    // Constructeur avec id
+    public Opportunite(int id, String titre, String description, int exp_years, String lieu, Type type) {
+        this.id = id;
+        this.titre = titre;
+        this.description = description;
+        this.exp_years = exp_years;
+        this.lieu = lieu;
+        this.type = type;
+    }
+
+    // Ajout de la méthode getId
+    public int getId() {
+        return id;
+    }
+
+    // Getter et Setter pour les autres champs
     public String getTitre() {
         return titre;
     }
@@ -81,7 +97,8 @@ public class Opportunite {
     @Override
     public String toString() {
         return "Opportunite{" +
-                "titre='" + titre + '\'' +
+                "id=" + id +
+                ", titre='" + titre + '\'' +
                 ", description='" + description + '\'' +
                 ", exp_years=" + exp_years +
                 ", lieu='" + lieu + '\'' +

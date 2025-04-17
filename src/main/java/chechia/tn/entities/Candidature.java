@@ -8,18 +8,17 @@ public class Candidature {
     private String experience;
     private Etat etat;
     private Type type;
+    private Opportunite opportunite;
 
-    // Enum pour "etat"
     public enum Etat {
         EN_ATTENTE, ACCEPTEE, REFUSE
     }
 
-    // Enum pour "type"
     public enum Type {
         EN_LIGNE, PRESENTIEL
     }
 
-    // Constructeur
+    // Constructeur sans opportunité
     public Candidature(int id, int userid, String cv, int anneeXp, String experience, Etat etat, Type type) {
         this.id = id;
         this.userid = userid;
@@ -30,68 +29,36 @@ public class Candidature {
         this.type = type;
     }
 
-    public Candidature(int id, int userid) {
-        this.id = id;
-        this.userid = userid;
+    // Constructeur avec opportunité
+    public Candidature(int id, int userid, String cv, int anneeXp, String experience, Etat etat, Type type, Opportunite opportunite) {
+        this(id, userid, cv, anneeXp, experience, etat, type);
+        this.opportunite = opportunite;
     }
 
-    // Getters et setters
-    public int getId() {
-        return id;
-    }
+    // Getters & Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getUserid() { return userid; }
+    public void setUserid(int userid) { this.userid = userid; }
 
-    public int getUserid() {
-        return userid;
-    }
+    public String getCv() { return cv; }
+    public void setCv(String cv) { this.cv = cv; }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
-    }
+    public int getAnneeXp() { return anneeXp; }
+    public void setAnneeXp(int anneeXp) { this.anneeXp = anneeXp; }
 
-    public String getCv() {
-        return cv;
-    }
+    public String getExperience() { return experience; }
+    public void setExperience(String experience) { this.experience = experience; }
 
-    public void setCv(String cv) {
-        this.cv = cv;
-    }
+    public Etat getEtat() { return etat; }
+    public void setEtat(Etat etat) { this.etat = etat; }
 
-    public int getAnneeXp() {
-        return anneeXp;
-    }
+    public Type getType() { return type; }
+    public void setType(Type type) { this.type = type; }
 
-    public void setAnneeXp(int anneeXp) {
-        this.anneeXp = anneeXp;
-    }
-
-    public String getExperience() {
-        return experience;
-    }
-
-    public void setExperience(String experience) {
-        this.experience = experience;
-    }
-
-    public Etat getEtat() {
-        return etat;
-    }
-
-    public void setEtat(Etat etat) {
-        this.etat = etat;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
+    public Opportunite getOpportunite() { return opportunite; }
+    public void setOpportunite(Opportunite opportunite) { this.opportunite = opportunite; }
 
     @Override
     public String toString() {
@@ -103,6 +70,8 @@ public class Candidature {
                 ", experience='" + experience + '\'' +
                 ", etat=" + etat +
                 ", type=" + type +
+                ", opportunite=" + (opportunite != null ? opportunite.getId() : "null") +
                 '}';
     }
 }
+

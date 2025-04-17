@@ -14,10 +14,10 @@ public class MainFX extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/opportunite.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/front.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setScene(scene);
-            stage.setTitle("Add Opportunite");
+            stage.setTitle(" Opportunite");
             stage.show();
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "❌ Erreur de chargement FXML", e);

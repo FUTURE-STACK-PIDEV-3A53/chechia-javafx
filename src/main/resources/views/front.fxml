@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+
+<AnchorPane prefHeight="476.0" prefWidth="954.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chechia.tn.controllers.FrontController">
+    <VBox styleClass="main-container" stylesheets="@../chechia/tn/css/front.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <!-- Top Navigation -->
+        <HBox styleClass="top-nav">
+            <padding>
+                <Insets bottom="10" left="20" right="20" top="10" />
+            </padding>
+            <ImageView fitHeight="56.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../chechia/tn/images/logo.png" />
+                </image>
+            </ImageView>
+            <Label prefHeight="54.0" prefWidth="134.0" styleClass="logo-text" text="Chechia" />
+            <Region HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER_RIGHT" spacing="20">
+                <Button styleClass="nav-button" text="USER" />
+                <Button styleClass="nav-button" text="Programme D'échange" />
+                <Button styleClass="nav-button" text="LinkedIn" />
+                <Button styleClass="nav-button" text="Reddit" />
+                <Button styleClass="nav-button" text="Évenement" />
+                <Button styleClass="nav-button" text="Game" />
+            </HBox>
+        </HBox>
+
+        <!-- Main Content -->
+        <HBox VBox.vgrow="ALWAYS">
+            <!-- Left Sidebar -->
+            <VBox prefWidth="250" styleClass="sidebar">
+                <padding>
+                    <Insets bottom="20" left="15" right="15" top="20" />
+                </padding>
+                <Label styleClass="sidebar-title" text="Emplois" />
+                <VBox spacing="10" styleClass="menu-items">
+                    <Button styleClass="menu-item" text="Développeur Frontend Jr" />
+                    <Button styleClass="menu-item" text="Conseiller Client Service" />
+                    <Button styleClass="menu-item" text="Ingénieur Projet" />
+                    <Button styleClass="menu-item" text="Candidature Spontanée" />
+                    <Button styleClass="menu-item" text="Stagiaire Devepos" />
+                    <Button styleClass="menu-item" text="Benevolat" />
+                </VBox>
+            </VBox>
+
+            <!-- Content Area -->
+            <VBox styleClass="content-area" HBox.hgrow="ALWAYS">
+                <!-- Navigation Tabs -->
+                <HBox fx:id="activeNavButton" styleClass="nav-tabs">
+                    <Button fx:id="homeButton" styleClass="tab-button" text="Home" />
+                    <Button fx:id="opportunitesButton" styleClass="tab-button, active-tab" text="Opportunités" />
+                    <Button fx:id="candidatureButton" styleClass="tab-button" text="Candidatures" />
+                </HBox>
+
+                <!-- Search and Filters -->
+                <VBox spacing="15" styleClass="search-filters">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
+
+                    <!-- Search Field with Icon -->
+                    <HBox styleClass="search-field-box">
+                        <FontAwesomeIconView glyphName="SEARCH" size="16" styleClass="search-icon"/>
+                        <TextField fx:id="searchField" promptText="Rechercher une candidature..." styleClass="search-field" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+
+                    <!-- Filters -->
+                    <HBox spacing="15" styleClass="filters-container">
+                        <ComboBox fx:id="typeContratFilter" maxWidth="Infinity" promptText="Type de contrat" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="locationFilter" maxWidth="Infinity" promptText="Localisation" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="experienceFilter" maxWidth="Infinity" promptText="Expérience" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                </VBox>
+
+                <!-- Grids Container -->
+                <StackPane VBox.vgrow="ALWAYS">
+                    <!-- Opportunities Grid -->
+                    <FlowPane fx:id="opportunitiesGrid" prefWrapLength="1000" hgap="20" vgap="20" styleClass="candidature-grid" visible="true">
+                        <padding>
+                            <Insets bottom="20" left="20" right="20" top="20" />
+                        </padding>
+                    </FlowPane>
+                    <!-- Candidatures Grid -->
+                    <FlowPane fx:id="candidaturesGrid" prefWrapLength="1000" hgap="20" vgap="20" styleClass="candidature-grid" visible="false">
+                        <padding>
+                            <Insets bottom="20" left="20" right="20" top="20" />
+                        </padding>
+                    </FlowPane>
+                </StackPane>
+            </VBox>
+        </HBox>
+    </VBox>
+</AnchorPane>
