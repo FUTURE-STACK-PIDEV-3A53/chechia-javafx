@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20.0" styleClass="content-area" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.GameListController">
+    <!-- Title -->
+    <Label text="Manage Games" styleClass="title-label">
+        <font>
+            <Font name="System Bold" size="24.0"/>
+        </font>
+    </Label>
+
+    <!-- Search and Filter Controls -->
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Search games..." prefWidth="300.0"/>
+        <Button fx:id="sortByIdButton" text="Sort by ID" onAction="#handleSortById"/>
+    </HBox>
+
+    <!-- Game Table -->
+    <TableView fx:id="gameTableView" VBox.vgrow="ALWAYS" styleClass="custom-table">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="60.0"/>
+            <TableColumn fx:id="pictureColumn" text="Image" prefWidth="100.0"/>
+            <TableColumn fx:id="nameColumn" text="Name" prefWidth="200.0"/>
+            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="300.0"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+
+    <!-- Action Buttons -->
+    <HBox spacing="10.0" alignment="CENTER_RIGHT">
+        <Button fx:id="adminButton" text="Admin Access" onAction="#handleAdminAccess"/>
+        <Button fx:id="addButton" text="Add Game" onAction="#handleAddGame"/>
+        <Button fx:id="editButton" text="Edit Game" onAction="#handleEditGame"/>
+        <Button fx:id="deleteButton" text="Delete Game" onAction="#handleDeleteGame"/>
+    </HBox>
+</VBox> 

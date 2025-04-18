@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" styleClass="main-background" stylesheets="@styles/application.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.MainController">
+    <!-- Left Navigation Panel -->
+    <VBox styleClass="navigation-panel" prefWidth="200.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+        <padding>
+            <Insets top="20.0" right="10.0" bottom="20.0" left="10.0"/>
+        </padding>
+        <Label text="Navigation" styleClass="navigation-title"/>
+        <Button fx:id="manageGamesBtn" text="Manage Games" styleClass="navigation-button" onAction="#showGameList"/>
+        <Button fx:id="manageRoomsBtn" text="Manage Game Rooms" styleClass="navigation-button" onAction="#showGameRoomList"/>
+    </VBox>
+
+    <!-- Main Content Area -->
+    <StackPane AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+        <padding>
+            <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+        </padding>
+        <!-- This is where different views will be loaded -->
+        <BorderPane fx:id="contentArea" styleClass="content-area"/>
+    </StackPane>
+</AnchorPane>
