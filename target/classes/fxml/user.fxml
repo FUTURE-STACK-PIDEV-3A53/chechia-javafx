@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mila.controller.UserController"
+      styleClass="user-container" spacing="20">
+    
+    <stylesheets>
+        <URL value="@../styles/styles.css"/>
+    </stylesheets>
+    <padding>
+        <Insets top="20" right="30" bottom="20" left="30"/>
+    </padding>
+    
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label text="Programmes d'Échange Disponibles" styleClass="user-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="searchField" promptText="Rechercher un programme..." prefWidth="250"/>
+        <ComboBox fx:id="filterType" prefWidth="150" promptText="Type de programme"/>
+        <ComboBox fx:id="filterNationality" prefWidth="150" promptText="Nationalité"/>
+        <Button text="Rechercher" onAction="#handleSearch" styleClass="search-button"/>
+    </HBox>
+    
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="program-scroll">
+        <FlowPane fx:id="programContainer" hgap="20" vgap="20">
+            <!-- Les cartes de programme seront ajoutées ici dynamiquement -->
+        </FlowPane>
+    </ScrollPane>
+</VBox>

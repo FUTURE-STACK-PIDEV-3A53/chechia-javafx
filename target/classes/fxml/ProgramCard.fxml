@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mila.controller.ProgramCardController"
+      styleClass="program-card">
+    
+    <VBox spacing="10">
+        <Label fx:id="titleLabel" styleClass="title" wrapText="true"/>
+        
+        <GridPane vgap="5" hgap="10">
+            <columnConstraints>
+                <ColumnConstraints hgrow="NEVER" minWidth="80"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            
+            <Label text="Type:" styleClass="details" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Label fx:id="typeLabel" styleClass="details" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            
+            <Label text="Nationalité:" styleClass="details" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Label fx:id="nationalityLabel" styleClass="details" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            
+            <Label text="Places:" styleClass="details" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Label fx:id="placesLabel" styleClass="details" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        </GridPane>
+        
+        <Region VBox.vgrow="ALWAYS" minHeight="10"/>
+        
+        <HBox alignment="CENTER_RIGHT">
+            <Button text="Postuler" onAction="#handleApply" styleClass="apply-button"/>
+        </HBox>
+    </VBox>
+    
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+</VBox>

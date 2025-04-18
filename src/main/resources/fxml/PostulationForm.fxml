@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.animation.*?>
+<?import javafx.application.Platform?>
+<?import javafx.util.Duration?>
+<?import java.net.URL?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mila.controller.PostulationFormController"
+      styleClass="form-container"
+      spacing="15">
+    
+    <stylesheets>
+        <URL value="@../styles/styles.css"/>
+    </stylesheets>
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <!-- Titre du formulaire avec animation -->
+    <Label fx:id="titleLabel" text="Formulaire de Postulation" styleClass="form-title">
+        <style>
+            -fx-opacity: 0;
+            -fx-translate-y: -20;
+        </style>
+        <effect>
+            <DropShadow color="rgba(0,0,0,0.2)" radius="5" spread="0.1"/>
+        </effect>
+    </Label>
+    
+    <!-- Grille pour les informations personnelles -->
+    <GridPane vgap="15" hgap="10">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+        
+        <!-- Nom -->
+        <Label text="Nom :" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nomField" promptText="Entrez votre nom" styleClass="form-field"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1">
+            <tooltip>
+                <Tooltip text="Entrez votre nom complet"/>
+            </tooltip>
+        </TextField>
+        
+        <!-- Prénom -->
+        <Label text="Prénom :" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="prenomField" promptText="Entrez votre prénom" styleClass="form-field"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        
+        <!-- Email -->
+        <Label text="Email :" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="emailField" promptText="Entrez votre email" styleClass="form-field"
+                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        
+        <!-- Age -->
+        <Label text="Age :" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="ageField" promptText="Entrez votre âge" styleClass="form-field"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1">
+            <tooltip>
+                <Tooltip text="Entrez votre âge (nombre entier)"/>
+            </tooltip>
+        </TextField>
+        
+        <!-- Programme -->
+        <Label text="Programme :" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="programmeComboBox" promptText="Sélectionnez un programme" styleClass="form-field"
+                  GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
+        
+        
+        <!-- CV -->
+        <Label text="CV :" styleClass="field-label" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+        <HBox spacing="10" GridPane.rowIndex="6" GridPane.columnIndex="1">
+            <TextField fx:id="cvField" promptText="Sélectionnez votre CV" styleClass="form-field" HBox.hgrow="ALWAYS"/>
+            <Button text="Parcourir" styleClass="secondary-button" onAction="#handleBrowseCV"/>
+        </HBox>
+    </GridPane>
+    
+    <!-- Lettre de motivation -->
+    <Label text="Lettre de motivation :" styleClass="field-label"/>
+    <TextArea fx:id="lettreMotivationField" promptText="Rédigez votre lettre de motivation" 
+              styleClass="form-field" wrapText="true" prefRowCount="5"/>
+    
+    <!-- Message de statut -->
+    <Label fx:id="statusLabel" styleClass="status-label" managed="false" visible="false"/>
+    
+    <!-- Boutons d'action -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Annuler" onAction="#handleCancel" styleClass="cancel-button"/>
+        <Button text="Soumettre" onAction="#handleSubmit" styleClass="primary-button" defaultButton="true"/>
+    </HBox>
+    
+    <!-- Les animations seront gérées dans le contrôleur -->
+    <stylesheets>
+        <URL value="@../styles/styles.css"/>
+    </stylesheets>
+</VBox>

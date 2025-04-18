@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.mila.controller.AdminController" spacing="20" styleClass="container">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher un programme..." HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="filterType" promptText="Type"/>
+        <ComboBox fx:id="filterNationality" promptText="Nationalité"/>
+        <Button text="Rechercher" onAction="#handleSearch" styleClass="search-button"/>
+        <Button text="Ajouter un programme" onAction="#handleAddProgram" styleClass="add-button"/>
+    </HBox>
+    
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="programContainer" hgap="20" vgap="20"/>
+    </ScrollPane>
+</VBox>

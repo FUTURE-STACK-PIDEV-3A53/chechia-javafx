@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mila.controller.AddProgramController"
+      styleClass="form-container" spacing="15">
+    
+    <stylesheets>
+        <URL value="@../styles/styles.css"/>
+    </stylesheets>
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label text="Ajouter un Programme d'Échange" styleClass="form-title"/>
+    
+    <GridPane vgap="15" hgap="10">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" minWidth="120"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+        
+        <!-- Nom du Programme -->
+        <Label text="Nom :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nameField" promptText="Nom du programme" styleClass="form-field"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        
+        <!-- Type de Programme -->
+        <Label text="Type :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="typeComboBox" promptText="Sélectionner le type" styleClass="form-field"
+                  GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        
+        <!-- Nationalité -->
+        <Label text="Nationalité :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="nationalityField" promptText="Pays d'origine" styleClass="form-field"
+                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        
+        <!-- Places Disponibles -->
+        <Label text="Places :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <Spinner fx:id="placesSpinner" editable="true" styleClass="form-field"
+                 GridPane.rowIndex="3" GridPane.columnIndex="1">
+            <valueFactory>
+                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="100" initialValue="1"/>
+            </valueFactory>
+        </Spinner>
+        
+        <!-- Description -->
+        <Label text="Description :" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextArea fx:id="descriptionArea" promptText="Description du programme" styleClass="form-field"
+                  wrapText="true" prefRowCount="3"
+                  GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    </GridPane>
+    
+    <!-- Boutons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Annuler" onAction="#handleCancel" styleClass="cancel-button"/>
+        <Button text="Ajouter" onAction="#handleSubmit" styleClass="primary-button" defaultButton="true"/>
+    </HBox>
+    
+    <!-- Message de statut -->
+    <Label fx:id="statusLabel" styleClass="status-label" managed="false" visible="false"/>
+</VBox>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mila.controller.AdminController"
+      styleClass="admin-container" spacing="20">
+    
+    <stylesheets>
+        <URL value="@../styles/styles.css"/>
+    </stylesheets>
+    
+    <padding>
+        <Insets top="20" right="30" bottom="20" left="30"/>
+    </padding>
+    
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label text="Gestion des Programmes d'Échange" styleClass="admin-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Ajouter un Programme" onAction="#handleAddProgram" styleClass="primary-button"/>
+    </HBox>
+    
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher un programme..." HBox.hgrow="ALWAYS" styleClass="form-field"/>
+        <ComboBox fx:id="filterType" promptText="Type de programme" styleClass="form-field"/>
+        <ComboBox fx:id="filterNationality" promptText="Nationalité" styleClass="form-field"/>
+        <Button text="Rechercher" onAction="#handleSearch" styleClass="secondary-button"/>
+    </HBox>
+    
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="program-scroll">
+        <FlowPane fx:id="programContainer" hgap="20" vgap="20">
+            <!-- Les cartes de programme seront ajoutées dynamiquement ici -->
+            <!-- Les cartes de programme seront ajoutées ici dynamiquement -->
+        </FlowPane>
+    </ScrollPane>
+</VBox>
