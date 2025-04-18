@@ -21,32 +21,7 @@ Application JavaFX pour la gestion de salles de jeux et leurs jeux associés.
   - Vérification des doublons
   - Validation des nombres de joueurs
 
-## Prérequis
 
-- Java JDK 17 ou supérieur
-- Maven
-- JavaFX SDK
-- Scene Builder (pour modification de l'interface)
-
-## Installation
-
-1. Cloner le dépôt :
-```bash
-git clone [URL_DU_REPO]
-cd chachiaPI
-```
-
-2. Compiler le projet :
-```bash
-mvn clean install
-```
-
-3. Exécuter l'application :
-```bash
-mvn javafx:run
-```
-
-## Structure du Projet
 
 - `src/main/java/org/example/`
   - `model/` : Classes modèles (GameRoom, Game)
