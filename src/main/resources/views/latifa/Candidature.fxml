@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+        <?import javafx.geometry.Insets?>
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.image.*?>
+        <?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="chechia.tn.controllers.latifa.CandidatureController"
+            prefHeight="700.0" prefWidth="600.0"
+            style="-fx-background-color: white;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <center>
+        <VBox spacing="15" style="-fx-background-color: white;">
+            <!-- Logo -->
+            <HBox alignment="CENTER">
+                <ImageView fitHeight="80.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../../chechia/tn/images/chechia.png"/>
+                </ImageView>
+            </HBox>
+
+            <!-- En-tête -->
+            <VBox alignment="CENTER" style="-fx-background-color: #7d222d;
+                                          -fx-padding: 20;
+                                          -fx-background-radius: 5;
+                                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 2);">
+                <Label text="Formulaire de Candidature"
+                       style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Label text="Veuillez remplir tous les champs obligatoires"
+                       style="-fx-font-size: 14; -fx-text-fill: white;"/>
+                <FontAwesomeIconView fill="#ded645" glyphName="ENVELOPE" size="1.8em"/>
+            </VBox>
+
+            <!-- Informations personnelles -->
+            <VBox spacing="15" styleClass="form-section"
+                  style="-fx-padding: 15; -fx-background-color: #f8f9fa; -fx-background-radius: 5;">
+                <Label text="Informations Personnelles"
+                       style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+                <GridPane hgap="20" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+
+                    <VBox spacing="5" GridPane.columnIndex="0">
+                        <Label text="ID Utilisateur *" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="userIdField" promptText="Votre ID"
+                                   style="-fx-padding: 8; -fx-background-radius: 3;"/>
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.columnIndex="1">
+                        <Label text="Type de candidature *" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="typeComboBox" maxWidth="Infinity" promptText="Sélectionnez le type"
+                                  style="-fx-padding: 8; -fx-background-radius: 3;"/>
+                    </VBox>
+                </GridPane>
+            </VBox>
+
+            <!-- Expérience -->
+            <VBox spacing="15" styleClass="form-section"
+                  style="-fx-padding: 15; -fx-background-color: #f8f9fa; -fx-background-radius: 5;">
+                <Label text="Expérience Professionnelle"
+                       style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+                <GridPane hgap="20" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+
+                    <VBox spacing="5" GridPane.columnIndex="0">
+                        <Label text="Années d'expérience *" style="-fx-font-weight: bold;"/>
+                        <Spinner fx:id="anneeXpSpinner"
+                                 style="-fx-padding: 8; -fx-background-radius: 3;"/>
+                    </VBox>
+                </GridPane>
+
+                <VBox spacing="5">
+                    <Label text="Description de votre expérience *" style="-fx-font-weight: bold;"/>
+                    <TextArea fx:id="experienceArea" prefRowCount="4"
+                              promptText="Décrivez vos expériences professionnelles précédentes..."
+                              wrapText="true"
+                              style="-fx-padding: 8;
+                                    -fx-background-radius: 5;
+                                    -fx-border-radius: 5;
+                                    -fx-border-width: 0;
+                                    -fx-font-size: 13;
+                                    -fx-focus-color: transparent;
+                                    -fx-background-color: #FFE4E1;
+                                    -fx-faint-focus-color: transparent;
+                                    -fx-prompt-text-fill: #666666;
+                                    -fx-control-inner-background: #FFE4E1;"/>
+                </VBox>
+            </VBox>
+
+            <!-- Upload CV -->
+            <VBox spacing="10" styleClass="form-section"
+                  style="-fx-padding: 15; -fx-background-color: #f8f9fa; -fx-background-radius: 5;">
+                <Label text="CV *" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <Button fx:id="uploadCvButton" onAction="#handleCvUpload"
+                            style="-fx-background-color: #7d222d;
+                                   -fx-text-fill: white;
+                                   -fx-padding: 10 20;
+                                   -fx-background-radius: 5;
+                                   -fx-cursor: hand;
+                                   -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 2);"
+                            text="Choisir un fichier">
+                        <graphic>
+                            <FontAwesomeIconView fill="white" glyphName="UPLOAD" size="1.2em"/>
+                        </graphic>
+                    </Button>
+                    <Label fx:id="cvLabel" text="Aucun fichier sélectionné"/>
+                </HBox>
+                <Label style="-fx-font-size: 12; -fx-text-fill: #666;"
+                       text="Formats acceptés : PDF, DOC, DOCX, JPG, JPEG, PNG"/>
+            </VBox>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="15" style="-fx-padding: 20 0 0 0;">
+            <Button fx:id="cancelButton" onAction="#handleCancel"
+                    style="-fx-background-color: #dc3545;
+                           -fx-text-fill: white;
+                           -fx-min-width: 120;
+                           -fx-padding: 12 25;
+                           -fx-background-radius: 5;
+                           -fx-cursor: hand;
+                           -fx-font-weight: bold;
+                           -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 2);
+                           -fx-border-width: 0;"
+                    text="Annuler">
+                <graphic>
+                    <FontAwesomeIconView fill="white" glyphName="TIMES" size="1.2em"/>
+                </graphic>
+            </Button>
+            <Button fx:id="submitButton" onAction="#handleSubmit"
+                    style="-fx-background-color: #7d222d;
+                           -fx-text-fill: white;
+                           -fx-min-width: 200;
+                           -fx-padding: 12 25;
+                           -fx-background-radius: 5;
+                           -fx-cursor: hand;
+                           -fx-font-weight: bold;
+                           -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 2);
+                           -fx-border-width: 0;"
+                    text="Envoyer ma candidature">
+                <graphic>
+                    <FontAwesomeIconView fill="white" glyphName="SEND" size="1.2em"/>
+                </graphic>
+            </Button>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="800.0" prefWidth="954.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chechia.tn.controllers.latifa.FronttController">
+    <VBox styleClass="main-container" stylesheets="@../../chechia/tn/css/front.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <!-- Top Navigation -->
+        <HBox styleClass="top-nav">
+            <padding>
+                <Insets bottom="10" left="20" right="20" top="10" />
+            </padding>
+            <ImageView fitHeight="56.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../../chechia/tn/images/logo.png" />
+                </image>
+            </ImageView>
+            <Label prefHeight="54.0" prefWidth="134.0" styleClass="logo-text" text="Chechia" />
+            <Region HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER_RIGHT" spacing="20">
+                <Button styleClass="nav-button" text="USER" />
+                <Button styleClass="nav-button" text="Programme D'échange" />
+                <Button styleClass="nav-button" text="LinkedIn" />
+                <Button fx:id="redditButton" styleClass="nav-button" text="Reddit" />
+                <Button styleClass="nav-button" text="Évenement" />
+                <Button styleClass="nav-button" text="Game" />
+            </HBox>
+        </HBox>
+
+        <!-- Main Content -->
+        <HBox VBox.vgrow="ALWAYS">
+            <!-- Left Sidebar -->
+            <VBox prefWidth="250" styleClass="sidebar">
+                <padding>
+                    <Insets bottom="20" left="15" right="15" top="20" />
+                </padding>
+                <Label styleClass="sidebar-title" text="Emplois" />
+
+                <VBox spacing="10" styleClass="menu-items">
+                    <Button contentDisplay="LEFT" styleClass="menu-item">
+                        <text>Développeur Frontend Jr</text>
+                        <graphic>
+                            <FontAwesomeIconView glyphName="CODE" />
+                        </graphic>
+                    </Button>
+
+                    <Button contentDisplay="LEFT" styleClass="menu-item">
+                        <text>Conseiller Client Service</text>
+                        <graphic>
+                            <FontAwesomeIconView fill="#266af2" glyphName="PHONE" />
+                        </graphic>
+                    </Button>
+
+                    <Button contentDisplay="LEFT" styleClass="menu-item">
+                        <text>Ingénieur Projet</text>
+                        <graphic>
+                            <FontAwesomeIconView fill="#dccc3c" glyphName="CUBES" />
+                        </graphic>
+                    </Button>
+
+                    <Button contentDisplay="LEFT" styleClass="menu-item">
+                        <text>Candidature Spontanée</text>
+                        <graphic>
+                            <FontAwesomeIconView fill="#bf9494" glyphName="PAPER_PLANE" />
+                        </graphic>
+                    </Button>
+
+                    <Button contentDisplay="LEFT" styleClass="menu-item">
+                        <text>Stagiaire Devepos</text>
+                        <graphic>
+                            <FontAwesomeIconView glyphName="GRADUATION_CAP" />
+                        </graphic>
+                    </Button>
+
+                    <Button contentDisplay="LEFT" styleClass="menu-item">
+                        <text>Benevolat</text>
+                        <graphic>
+                            <FontAwesomeIconView fill="#c73232" glyphName="HEART" />
+                        </graphic>
+                    </Button>
+                </VBox>
+            </VBox>
+
+            <!-- Content Area -->
+            <VBox styleClass="content-area" HBox.hgrow="ALWAYS">
+                <!-- Navigation Tabs -->
+                <HBox fx:id="activeNavButton" styleClass="nav-tabs">
+                    <Button fx:id="homeButton" styleClass="tab-button" text="Home" />
+                    <Button fx:id="opportunitesButton" styleClass="tab-button, active-tab" text="Opportunités" />
+                    <Button fx:id="candidatureButton" styleClass="tab-button" text="Candidatures" />
+                </HBox>
+                <HBox alignment="CENTER" spacing="10" styleClass="moka" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+                    <!-- Ajout de l'image -->
+                    <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../chechia/tn/images/candida.png" />
+                    </ImageView>
+                    <FontAwesomeIconView fill="#101010" glyphName="PLANE" size="1.5em" />
+                    <!-- Ajout du texte -->
+                    <Label style="-fx-text-fill: red; -fx-font-size: 24px;" text="Linkdin Tounsi" />
+                    <FontAwesomeIconView glyphName="ROCKET" selectionFill="#e1e1e1" size="1.5em" />
+                    <ImageView fitHeight="110.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../chechia/tn/images/man.png" />
+                    </ImageView>
+                </HBox>
+
+
+                <!-- Search and Filters -->
+                <VBox spacing="15" styleClass="search-filters">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
+
+                    <!-- Search Field with Icon -->
+                    <VBox spacing="100" styleClass="search-container">
+                        <HBox alignment="CENTER_LEFT" styleClass="search-field-box">
+                            <FontAwesomeIconView glyphName="SEARCH" size="16" styleClass="search-icon">
+                                <HBox.margin>
+                                    <Insets right="10.0" />
+                                </HBox.margin></FontAwesomeIconView>
+                            <TextField fx:id="searchField" promptText="Rechercher une candidature..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+                        </HBox>
+                    </VBox>
+
+                    <!-- Filters -->
+                    <HBox spacing="15" styleClass="filters-container">
+                        <ComboBox fx:id="typeContratFilter" maxWidth="Infinity" promptText="Type de contrat" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="locationFilter" maxWidth="Infinity" promptText="Localisation" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="experienceFilter" maxWidth="Infinity" promptText="Expérience" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                </VBox>
+
+                <!-- Grids Container -->
+                <AnchorPane VBox.vgrow="ALWAYS">
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <content>
+                            <AnchorPane>
+                                <!-- Opportunities Grid -->
+                                <FlowPane fx:id="opportunitiesGrid" hgap="20" style="-fx-background-color: transparent;" vgap="20" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <padding>
+                                        <Insets bottom="20" left="20" right="20" top="20" />
+                                    </padding>
+                                    <stylesheets>
+                                        <URL value="@../../chechia/tn/css/front.css" />
+                                    </stylesheets>
+                                </FlowPane>
+                                <!-- Candidatures Grid -->
+                                <FlowPane fx:id="candidaturesGrid" hgap="20" style="-fx-background-color: transparent;" vgap="20" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <padding>
+                                        <Insets bottom="20" left="20" right="20" top="20" />
+                                    </padding>
+                                </FlowPane>
+                            </AnchorPane>
+                        </content>
+                    </ScrollPane>
+                </AnchorPane>
+            </VBox>
+        </HBox>
+    </VBox>
+    <!-- Chat Bubble Floating Button -->
+    <StackPane pickOnBounds="false" AnchorPane.bottomAnchor="30" AnchorPane.rightAnchor="30">
+        <!-- Chat Window (hidden by default) -->
+        <VBox fx:id="chatWindow" alignment="BOTTOM_RIGHT" prefHeight="220" prefWidth="260" style="-fx-background-color: white; -fx-border-radius: 12; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, #ff4d4d, 8, 0.5, 0, 1);" visible="false">
+            <padding>
+                <Insets bottom="6" left="6" right="6" top="6" />
+            </padding>
+            <HBox alignment="TOP_RIGHT">
+                <Label style="-fx-font-weight: bold; -fx-font-size: 18; -fx-text-fill: #333;" text="Chat" />
+                <ImageView fitHeight="73.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true">
+                    <HBox.margin>
+                        <Insets left="80.0" />
+                    </HBox.margin>
+                    <image>
+                        <Image url="@../../chechia/tn/images/robot1.png" />
+                    </image>
+                </ImageView>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="closeChatButton" onAction="#toggleChatWindow" style="-fx-background-color: transparent; -fx-text-fill: #888; -fx-font-size: 12; -fx-cursor: hand;" text="✖" />
+            </HBox>
+            <TextArea fx:id="chatHistory" editable="false" prefHeight="110" style="-fx-background-color: #f5f5f5; -fx-background-radius: 8; -fx-border-radius: 8; -fx-padding: 6; -fx-font-size: 11;" wrapText="true" />
+            <HBox alignment="CENTER_RIGHT" spacing="5" style="-fx-padding: 5 0 0 0;">
+                <TextField fx:id="chatInput" promptText="Votre message..." style="-fx-background-radius: 14; -fx-border-radius: 14; -fx-padding: 4 7; -fx-font-size: 11;" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleSendMessage" style="-fx-background-color: #d32f2f; -fx-text-fill: white; -fx-background-radius: 14; -fx-padding: 4 10; -fx-font-size: 11;" text="Envoyer" />
+            </HBox>
+        </VBox>
+        <!-- Floating Chat Button -->
+        <Button fx:id="chatBubbleButton" onAction="#toggleChatWindow" prefHeight="26.0" prefWidth="123.0" style="-fx-background-radius: 80%; -fx-background-color: #d32f2f; -fx-cursor: hand; -fx-padding: 2; -fx-effect: dropshadow(gaussian, #888, 4, 0.5, 0, 1); width: 72px; height: 42px; min-width: 42px; min-height: 42px; max-width: 72px; max-height: 42px;" styleClass="chat-bubble-btn">
+            <graphic>
+                <FontAwesomeIconView fill="#1e2d78" glyphName="COMMENT" text="" wrappingWidth="52.800048828125" />
+            </graphic>
+        </Button>
+        <Label text="Chat" textFill="WHITE">
+            <StackPane.margin>
+                <Insets left="30.0" />
+            </StackPane.margin>
+        </Label>
+    </StackPane>
+
+</AnchorPane>

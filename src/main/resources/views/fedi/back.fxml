@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane styleClass="main-container" stylesheets="@../../chechia/tn/css/fedi.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chechia.tn.controllers.fedi.BackController">
+    
+    <top>
+        <VBox>
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="nav-bar">
+                <padding>
+                    <Insets bottom="15" left="25" right="25" top="15" />
+                </padding>
+                <Label styleClass="app-title" text="Administration" />
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <TabPane>
+            <Tab closable="false" text="Posts">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label styleClass="section-title" text="Liste des posts">
+                            <font>
+                                <Font name="System Bold" size="18" />
+                            </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                    </HBox>
+                    <TableView fx:id="postTableView" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="postTitreColumn" prefWidth="200" text="Titre" />
+                            <TableColumn fx:id="postContenuColumn" prefWidth="300" text="Contenu" />
+                            <TableColumn fx:id="postDateColumn" prefWidth="150" text="Date" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+            
+            <Tab closable="false" text="Commentaires">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label styleClass="section-title" text="Liste des commentaires">
+                            <font>
+                                <Font name="System Bold" size="18" />
+                            </font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                    </HBox>
+                    <TableView fx:id="commentaireTableView" stylesheets="@../../chechia/tn/css/fedi.css" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="commentaireContenuColumn" prefWidth="400" text="Contenu" />
+                            <TableColumn fx:id="commentaireDateColumn" prefWidth="150" text="Date" />
+                            <TableColumn fx:id="commentairePostIdColumn" prefWidth="100" text="ID Post" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

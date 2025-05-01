@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chechia.tn.controllers.omar.AdminDashboardController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <top>
+        <VBox alignment="CENTER" spacing="10.0">
+            <Label styleClass="title" text="Tableau de Bord Administrateur">
+                <font>
+                    <Font name="System Bold" size="28.0" />
+                </font>
+            </Label>
+            <Label fx:id="welcomeLabel" styleClass="subtitle" text="Bienvenue, Admin!">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <Separator />
+            <padding>
+                <Insets bottom="20.0" />
+            </padding>
+        </VBox>
+    </top>
+
+    <center>
+        <GridPane alignment="CENTER" hgap="20.0" vgap="20.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+
+            <!-- Row 1: Management Cards -->
+            <VBox styleClass="dashboard-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </padding>
+                <Label styleClass="card-title" text="Gestion des Événements">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Separator />
+                <Label text="Gérez tous les événements: créer, modifier, supprimer et afficher les détails." wrapText="true">
+                    <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                    </VBox.margin>
+                </Label>
+                <Button fx:id="eventsButton" maxWidth="Infinity" onAction="#handleEvents" styleClass="button-primary" text="Gérer les Événements" />
+            </VBox>
+
+            <VBox styleClass="dashboard-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </padding>
+                <Label styleClass="card-title" text="Gestion des Réservations">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Separator />
+                <Label text="Gérez toutes les réservations: créer, modifier, supprimer et afficher les détails." wrapText="true">
+                    <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                    </VBox.margin>
+                </Label>
+                <Button fx:id="reservationsButton" maxWidth="Infinity" onAction="#handleReservations" styleClass="button-success" text="Gérer les Réservations" />
+            </VBox>
+
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="300.0" prefWidth="350.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="300.0" prefWidth="350.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="200.0" prefHeight="250.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="20.0">
+            <Button fx:id="logoutButton" onAction="#handleLogout" prefWidth="150.0" styleClass="button-secondary" text="Déconnexion" />
+            <Button onAction="#handleExit" prefWidth="150.0" styleClass="button-danger" text="Quitter" />
+            <padding>
+                <Insets top="20.0" />
+            </padding>
+        </HBox>
+    </bottom>
+
+    <stylesheets>
+        <String fx:value="/chechia/tn/css/omar.css" />
+    </stylesheets>
+</BorderPane>

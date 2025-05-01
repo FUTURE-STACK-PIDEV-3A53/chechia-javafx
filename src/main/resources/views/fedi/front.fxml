@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chechia.tn.controllers.fedi.FrontController" styleClass="main-container">
+    <stylesheets>
+        <URL value="@/chechia/tn/css/fedi.css"/>
+    </stylesheets>
+
+    <top>
+        <VBox>
+            <HBox styleClass="nav-bar" spacing="15" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets top="15" right="25" bottom="15" left="25"/>
+                </padding>
+                <Label text="Gestion des Posts" styleClass="app-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnNouveau" text="Nouveau Post" onAction="#handleNouveauPost" styleClass="nav-button-primary"/>
+                <Button fx:id="btnModifier" text="Modifier" onAction="#handleModifierPost" styleClass="nav-button-secondary"/>
+                <Button fx:id="btnSupprimer" text="Supprimer" onAction="#handleSupprimerPost" styleClass="nav-button-secondary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.6" styleClass="content-container">
+            <VBox spacing="25" styleClass="posts-container">
+                <padding>
+                    <Insets top="25" right="25" bottom="25" left="25"/>
+                </padding>
+
+                <VBox fx:id="postFormContainer" spacing="10" styleClass="post-form" managed="false" visible="false">
+                    <Label text="Détails du Post" styleClass="section-title">
+                        <font>
+                            <Font name="System Bold" size="18"/>
+                        </font>
+                    </Label>
+
+                    <TextField fx:id="titreTextField" promptText="Titre du post" styleClass="input-field" maxWidth="600"/>
+                    <TextArea fx:id="contenuTextArea" promptText="Contenu du post" wrapText="true" prefRowCount="4" styleClass="input-field" maxWidth="600"/>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="imageTextField" promptText="Chemin de l'image" HBox.hgrow="ALWAYS" styleClass="input-field"/>
+                        <Button text="Choisir Image" onAction="#handleChoisirImage" styleClass="action-button"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="videoTextField" promptText="Chemin de la vidéo" HBox.hgrow="ALWAYS" styleClass="input-field"/>
+                        <Button text="Choisir Vidéo" onAction="#handleChoisirVideo" styleClass="action-button"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button text="Publier" onAction="#handlePublierPost" styleClass="primary-button"/>
+                        <Button text="Annuler" onAction="#handleAnnulerPost" styleClass="secondary-button"/>
+                    </HBox>
+                </VBox>
+
+                <ListView fx:id="postListView" VBox.vgrow="ALWAYS" styleClass="post-list"/>
+            </VBox>
+
+            <VBox fx:id="commentaireContainer" styleClass="commentaire-container">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>

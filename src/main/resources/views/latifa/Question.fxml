@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="interviewAnalysisSection"
+      spacing="20"
+      style="-fx-background-color: #141414; -fx-padding: 25;"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="chechia.tn.controllers.latifa.questionController">
+
+    <Label text="Analyse d'Offre d'Emploi" style="-fx-text-fill: white;">
+        <font>
+            <Font name="System Bold" size="24.0"/>
+        </font>
+    </Label>
+
+    <TextArea fx:id="jobOfferTextArea"
+              promptText="Collez l'offre d'emploi ici..."
+              wrapText="true"
+              prefRowCount="8"
+              styleClass="modern-textarea"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button fx:id="analyzeButton"
+                text="Analyser l'offre"
+                onAction="#handleAnalyzeJobOffer"
+                styleClass="primary-button"/>
+
+        <ProgressIndicator fx:id="analysisLoading"
+                           visible="false"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" style="-fx-background: transparent;">
+        <FlowPane fx:id="questionsContainer"
+                  hgap="20"
+                  vgap="20"
+                  styleClass="questions-container"/>
+    </ScrollPane>
+</VBox>

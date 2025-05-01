@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<VBox spacing="20" styleClass="main-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chechia.tn.controllers.fedi.PostController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <stylesheets>
+        <URL value="@/chechia/tn/css/fedi.css"/>
+    </stylesheets>
+    
+    <VBox spacing="10" styleClass="post-form">
+        <Label text="Nouveau Post" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="18"/>
+            </font>
+        </Label>
+        
+        <TextField fx:id="titreTextField" promptText="Titre du post" styleClass="input-field"/>
+        <TextArea fx:id="contenuTextArea" promptText="Contenu du post" wrapText="true" prefRowCount="3" styleClass="input-field"/>
+        
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="imageTextField" promptText="Chemin de l'image" HBox.hgrow="ALWAYS" styleClass="input-field"/>
+            <Button text="Choisir Image" onAction="#handleChoisirImage" styleClass="action-button"/>
+        </HBox>
+        
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="videoTextField" promptText="Chemin de la vidéo" HBox.hgrow="ALWAYS" styleClass="input-field"/>
+            <Button text="Choisir Vidéo" onAction="#handleChoisirVideo" styleClass="action-button"/>
+        </HBox>
+        
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="Publier" onAction="#handlePublierPost" styleClass="primary-button"/>
+            <Button text="Modifier" onAction="#handleModifierPost" styleClass="secondary-button"/>
+            <Button text="Supprimer" onAction="#handleSupprimerPost" styleClass="danger-button"/>
+        </HBox>
+    </VBox>
+    
+    <HBox spacing="20" VBox.vgrow="ALWAYS">
+        <ListView fx:id="postListView" HBox.hgrow="ALWAYS" styleClass="post-list"/>
+        <VBox fx:id="commentaireContainer" HBox.hgrow="ALWAYS" styleClass="commentaire-container"/>
+    </HBox>
+</VBox>
