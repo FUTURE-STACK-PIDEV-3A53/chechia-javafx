@@ -1,6 +1,19 @@
--- Création de la base de données
+-- Create database if not exists
 CREATE DATABASE IF NOT EXISTS chechia;
+
+-- Use the database
 USE chechia;
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    is_admin BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP NULL
+);
 
 -- Table des jeux
 CREATE TABLE IF NOT EXISTS game (

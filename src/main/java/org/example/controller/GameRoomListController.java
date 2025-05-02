@@ -13,15 +13,29 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.example.dao.GameDAO;
 import org.example.dao.GameRoomDAO;
+import org.example.dao.PlayerDAO;
 import org.example.model.Game;
 import org.example.model.GameRoom;
+import org.example.model.Player;
+import org.example.model.User;
+import org.example.utils.SessionManager;
+import org.example.utils.DatabaseConnection;
+import org.example.utils.PDFGenerator;
+import com.itextpdf.text.DocumentException;
 
+import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.awt.Desktop;
 
 public class GameRoomListController {
 
@@ -49,25 +63,71 @@ public class GameRoomListController {
     private Button deleteButton;
     @FXML
     private Button adminButton;
+    @FXML
+    private Button playButton;
+    @FXML
+    private Button chatBotButton;
+    @FXML
+    private Button downloadPDFButton;
 
     private GameRoomDAO gameRoomDAO;
+    private GameDAO gameDAO;
+    private PlayerDAO playerDAO;
     private ObservableList<GameRoom> gameRoomList;
     private FilteredList<GameRoom> filteredRooms;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private boolean sortAscending = true;
 
+    @FXML
     public void initialize() {
-        try {
-            gameRoomDAO = GameRoomDAO.getInstance();
-            setupTableColumns();
-            setupSearch();
-            loadGameRooms();
-            setAdminButtonsVisible(false);
-        } catch (Exception e) {
+        gameRoomDAO = GameRoomDAO.getInstance();
+        gameDAO = GameDAO.getInstance();
+        playerDAO = PlayerDAO.getInstance();
+        
+        // Initialiser les données de test
+        playerDAO.initializeTestData();
+        
+        // Afficher la structure de la base de données
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            DatabaseMetaData metaData = conn.getMetaData();
+            ResultSet tables = metaData.getTables("chechia", null, "%", new String[]{"TABLE"});
+            
+            System.out.println("\nStructure de la base de données :");
+            while (tables.next()) {
+                String tableName = tables.getString("TABLE_NAME");
+                System.out.println("\nTable: " + tableName);
+                
+                ResultSet columns = metaData.getColumns("chechia", null, tableName, "%");
+                while (columns.next()) {
+                    String columnName = columns.getString("COLUMN_NAME");
+                    String columnType = columns.getString("TYPE_NAME");
+                    System.out.println("  - " + columnName + " (" + columnType + ")");
+                }
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Initialization Error", "Failed to initialize data access objects.");
-            return;
         }
+
+        setupTableColumns();
+        loadGameRooms();
+        setupSearch();
+        
+        // Ensure play button is visible and properly configured
+        if (playButton != null) {
+            playButton.setVisible(true);
+            playButton.setManaged(true);
+            playButton.setDisable(true); // Initially disabled until a game room is selected
+        }
+        
+        // Add selection listener to enable/disable play button
+        gameRoomTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (playButton != null) {
+                playButton.setDisable(newSelection == null || newSelection.getGame() == null);
+            }
+        });
+        
+        // Hide admin buttons initially
+        setAdminButtonsVisible(false);
     }
 
     private void setupTableColumns() {
@@ -182,26 +242,42 @@ public class GameRoomListController {
 
     @FXML
     private void handleAdminAccess() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Admin Access");
-        dialog.setHeaderText("Enter Admin Code");
-        dialog.setContentText("Code:");
+        User currentUser = SessionManager.getUser();
+        if (currentUser != null && currentUser.isAdmin()) {
+            setAdminButtonsVisible(true);
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Admin access granted!");
+        } else {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Admin Access");
+            dialog.setHeaderText("Enter Admin Code");
+            dialog.setContentText("Code:");
 
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(code -> {
-            if (code.equals("0000")) {
-                setAdminButtonsVisible(true);
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Admin access granted!");
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Error", "Invalid admin code!");
-            }
-        });
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(code -> {
+                if (code.equals("0000")) {
+                    setAdminButtonsVisible(true);
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "Admin access granted!");
+                } else {
+                    setAdminButtonsVisible(false);
+                    showAlert(Alert.AlertType.ERROR, "Error", "Invalid admin code!");
+                }
+            });
+        }
     }
 
     private void setAdminButtonsVisible(boolean visible) {
-        addButton.setVisible(visible);
-        editButton.setVisible(visible);
-        deleteButton.setVisible(visible);
+        if (addButton != null) {
+            addButton.setVisible(visible);
+            addButton.setManaged(visible);
+        }
+        if (editButton != null) {
+            editButton.setVisible(visible);
+            editButton.setManaged(visible);
+        }
+        if (deleteButton != null) {
+            deleteButton.setVisible(visible);
+            deleteButton.setManaged(visible);
+        }
     }
 
     @FXML
@@ -210,41 +286,31 @@ public class GameRoomListController {
     }
 
     @FXML
-    private void handleEditGameRoom(ActionEvent event) {
-        GameRoom selectedGameRoom = gameRoomTableView.getSelectionModel().getSelectedItem();
-        if (selectedGameRoom != null) {
-            showGameRoomForm(selectedGameRoom);
-        } else {
-            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a game room to edit.");
+    private void handleEditRoom() {
+        GameRoom selectedRoom = gameRoomTableView.getSelectionModel().getSelectedItem();
+        if (selectedRoom != null) {
+            showGameRoomForm(selectedRoom);
         }
     }
 
     @FXML
-    private void handleDeleteGameRoom(ActionEvent event) {
-        GameRoom selectedGameRoom = gameRoomTableView.getSelectionModel().getSelectedItem();
-        if (selectedGameRoom != null) {
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmAlert.setTitle("Confirm Deletion");
-            confirmAlert.setHeaderText("Delete Game Room: ID " + selectedGameRoom.getId() + " at " + selectedGameRoom.getLocation());
-            confirmAlert.setContentText("Are you sure you want to delete this game room? This action cannot be undone.");
+    private void handleDeleteRoom() {
+        GameRoom selectedRoom = gameRoomTableView.getSelectionModel().getSelectedItem();
+        if (selectedRoom != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Game Room");
+            alert.setHeaderText("Delete Game Room");
+            alert.setContentText("Are you sure you want to delete this game room?");
 
-            Optional<ButtonType> result = confirmAlert.showAndWait();
+            Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
-                    boolean deleted = gameRoomDAO.delete(selectedGameRoom.getId());
-                    if (deleted) {
-                        gameRoomList.remove(selectedGameRoom);
-                        showAlert(Alert.AlertType.INFORMATION, "Success", "Game Room deleted successfully.");
-                    } else {
-                        showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete the game room from the database.");
-                    }
+                    gameRoomDAO.delete(selectedRoom.getId());
+                    loadGameRooms();
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Database Error", "An error occurred while deleting the game room: " + e.getMessage());
+                    showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete game room: " + e.getMessage());
                 }
             }
-        } else {
-            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a game room to delete.");
         }
     }
 
@@ -266,6 +332,164 @@ public class GameRoomListController {
         } catch (IOException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Error", "Could not load the game room form.");
+        }
+    }
+
+    @FXML
+    private void handlePlayGame() {
+        GameRoom selectedRoom = gameRoomTableView.getSelectionModel().getSelectedItem();
+        if (selectedRoom == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a game room to play.");
+            return;
+        }
+
+        Game game = selectedRoom.getGame();
+        if (game == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "No game associated with this room.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/riddleGame.fxml"));
+            Parent root = loader.load();
+            
+            RiddleGameController controller = loader.getController();
+            
+            // Créer un nouveau joueur pour cette partie
+            Player player = new Player();
+            if (SessionManager.isLoggedIn()) {
+                User currentUser = SessionManager.getUser();
+                player.setId(currentUser.getId());
+                player.setUsername(currentUser.getUsername());
+                player.setScore(0);
+                player.setGameRoomId(selectedRoom.getId());
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "You must be logged in to play.");
+                return;
+            }
+            
+            // Initialiser le jeu et le joueur
+            controller.setGameAndPlayer(game, player);
+            
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Playing " + game.getName());
+            stage.setScene(new Scene(root));
+            stage.show();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not load the game.");
+        }
+    }
+
+    @FXML
+    private void handleShowRankings() {
+        GameRoom selectedRoom = gameRoomTableView.getSelectionModel().getSelectedItem();
+        if (selectedRoom == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a game room to view rankings.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/rankingView.fxml"));
+            Parent root = loader.load();
+
+            RankingController controller = loader.getController();
+            controller.setGameRoom(selectedRoom);
+
+            Stage stage = new Stage();
+            stage.setTitle("Game Rankings - " + selectedRoom.getGame().getName());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not load the rankings view.");
+        }
+    }
+
+    @FXML
+    private void handleShowSuggestions() {
+        GameRoom selectedRoom = gameRoomTableView.getSelectionModel().getSelectedItem();
+        if (selectedRoom == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a game room to view opponent suggestions.");
+            return;
+        }
+
+        try {
+            if (!SessionManager.isLoggedIn()) {
+                showAlert(Alert.AlertType.WARNING, "Non connecté", "Vous devez être connecté pour voir les suggestions d'adversaires.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/opponentSuggestions.fxml"));
+            Parent root = loader.load();
+
+            OpponentSuggestionsController controller = loader.getController();
+            controller.setGameRoom(selectedRoom);
+
+            Stage stage = new Stage();
+            stage.setTitle("Suggestions d'adversaires - " + selectedRoom.getGame().getName());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not load the suggestions view.");
+        }
+    }
+
+    @FXML
+    private void handleChatBot() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/chatBot.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Assistant de Jeu");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'interface du chatbot.");
+        }
+    }
+
+    @FXML
+    private void handleDownloadPDF() {
+        GameRoom selectedRoom = gameRoomTableView.getSelectionModel().getSelectedItem();
+        if (selectedRoom == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aucune salle sélectionnée");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez sélectionner une salle de jeu pour télécharger le classement.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            List<Player> players = playerDAO.getPlayersByGameRoom(selectedRoom.getId());
+            String filePath = PDFGenerator.generateRankingPDF(selectedRoom, players);
+            
+            // Ouvrir le PDF automatiquement
+            File pdfFile = new File(filePath);
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
+                Desktop.getDesktop().open(pdfFile);
+            }
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Téléchargement réussi");
+            alert.setHeaderText(null);
+            alert.setContentText("Le classement a été téléchargé et ouvert avec succès.");
+            alert.showAndWait();
+        } catch (IOException | DocumentException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Une erreur est survenue lors de la génération ou de l'ouverture du PDF : " + e.getMessage());
+            alert.showAndWait();
         }
     }
 

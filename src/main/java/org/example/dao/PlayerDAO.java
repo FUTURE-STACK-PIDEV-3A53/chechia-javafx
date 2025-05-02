@@ -1,8 +1,9 @@
 package org.example.dao;
 
-import org.example.db.DBConnection;
-import org.example.model.GameRoom;
 import org.example.model.Player;
+import org.example.utils.DatabaseConnection;
+import org.example.utils.SessionManager;
+import org.example.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ public class PlayerDAO {
     private static PlayerDAO instance;
     private GameRoomDAO gameRoomDAO;
 
+    private PlayerDAO() {}
+
     public static PlayerDAO getInstance() {
         if (instance == null) {
             instance = new PlayerDAO();
@@ -19,181 +22,175 @@ public class PlayerDAO {
         return instance;
     }
 
-    private PlayerDAO() {
-        // Le constructeur est privé pour le pattern Singleton
-    }
-
     public void setGameRoomDAO(GameRoomDAO gameRoomDAO) {
         this.gameRoomDAO = gameRoomDAO;
     }
-    
-    public Player save(Player player) {
-        String sql = "INSERT INTO player (gameroom_id, score, created) VALUES (?, ?, ?)";
-        Connection conn = null;
-        
-        try {
-            conn = DBConnection.getConnection();
-            try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                pstmt.setLong(1, player.getGameRoomId());
-                pstmt.setInt(2, player.getScore());
-                pstmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-                
-                int affectedRows = pstmt.executeUpdate();
-                
-                if (affectedRows > 0) {
-                    try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            player.setId(rs.getLong(1));
-                        }
-                    }
-                }
-                conn.commit();
-                System.out.println("Joueur enregistré avec succès - ID: " + player.getId());
-            }
-        } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    System.err.println("Erreur lors du rollback - " + ex.getMessage());
-                }
-            }
-            System.err.println("Erreur lors de l'enregistrement du joueur - " + e.getMessage());
-            throw new RuntimeException("Échec de l'enregistrement du joueur", e);
+
+    public void save(Player player) {
+        if (!SessionManager.isLoggedIn()) {
+            System.err.println("Erreur : Aucun utilisateur connecté");
+            return;
         }
-        return player;
-    }
-    
-    public Player findById(Long id) {
-        String sql = "SELECT * FROM player WHERE id = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setLong(1, id);
-            
-            try (ResultSet rs = pstmt.executeQuery()) {
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // Get game_id from gameroom
+            String gameQuery = "SELECT game_id FROM gameroom WHERE id = ?";
+            try (PreparedStatement gameStmt = conn.prepareStatement(gameQuery)) {
+                gameStmt.setLong(1, player.getGameRoomId());
+                ResultSet rs = gameStmt.executeQuery();
                 if (rs.next()) {
-                    return mapResultSetToPlayer(rs);
+                    Long gameId = rs.getLong("game_id");
+                    User currentUser = SessionManager.getUser();
+                    
+                    // Save in user_scores table
+                    String userScoresQuery = "INSERT INTO user_scores (user_id, game_id, score) VALUES (?, ?, ?) " +
+                                          "ON DUPLICATE KEY UPDATE score = ?";
+                    try (PreparedStatement userScoresStmt = conn.prepareStatement(userScoresQuery)) {
+                        userScoresStmt.setLong(1, currentUser.getId());
+                        userScoresStmt.setLong(2, gameId);
+                        userScoresStmt.setInt(3, player.getScore());
+                        userScoresStmt.setInt(4, player.getScore());
+                        userScoresStmt.executeUpdate();
+                    }
+                    
+                    // Save in player table
+                    String playerQuery = "INSERT INTO player (id, gameroom_id, score, created) VALUES (?, ?, ?, NOW()) " +
+                                       "ON DUPLICATE KEY UPDATE score = ?";
+                    try (PreparedStatement playerStmt = conn.prepareStatement(playerQuery)) {
+                        playerStmt.setLong(1, currentUser.getId());
+                        playerStmt.setLong(2, player.getGameRoomId());
+                        playerStmt.setInt(3, player.getScore());
+                        playerStmt.setInt(4, player.getScore());
+                        playerStmt.executeUpdate();
+                    }
+                    
+                    DatabaseConnection.commit();
+                    System.out.println("Score enregistré avec succès - User: " + currentUser.getUsername() + 
+                                     ", Game ID: " + gameId + 
+                                     ", Score: " + player.getScore());
+                } else {
+                    System.err.println("Game ID non trouvé pour GameRoom ID: " + player.getGameRoomId());
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la recherche du joueur - " + e.getMessage());
+            e.printStackTrace();
+            DatabaseConnection.rollback();
+            System.err.println("Erreur lors de l'enregistrement du score - " + e.getMessage());
         }
-        return null;
     }
-    
-    public List<Player> findByGameRoomId(Long gameRoomId) {
+
+    public List<Player> getPlayersByGameRoom(Long gameRoomId) {
         List<Player> players = new ArrayList<>();
-        String sql = "SELECT * FROM player WHERE gameroom_id = ?";
+        String sql = "SELECT u.userID, u.username, COALESCE(MAX(us.score), 0) as best_score, gr.id as gameroom_id " +
+                    "FROM user1 u " +
+                    "CROSS JOIN (SELECT id FROM gameroom WHERE id = ?) gr " +
+                    "LEFT JOIN user_scores us ON us.user_id = u.userID " +
+                    "LEFT JOIN gameroom g ON us.game_id = g.game_id AND g.id = gr.id " +
+                    "GROUP BY u.userID, u.username, gr.id " +
+                    "ORDER BY best_score DESC";
         
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            pstmt.setLong(1, gameRoomId);
+            stmt.setLong(1, gameRoomId);
+            ResultSet rs = stmt.executeQuery();
             
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    players.add(mapResultSetToPlayer(rs));
-                }
+            while (rs.next()) {
+                Player player = new Player();
+                player.setId(rs.getLong("userID"));
+                player.setUsername(rs.getString("username"));
+                player.setScore(rs.getInt("best_score"));
+                player.setGameRoomId(rs.getLong("gameroom_id"));
+                players.add(player);
             }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la recherche des joueurs - " + e.getMessage());
+            System.err.println("Error getting players by game room: " + e.getMessage());
+            e.printStackTrace();
         }
         return players;
     }
-    
-    public boolean update(Player player) {
-        String sql = "UPDATE player SET gameroom_id = ?, score = ? WHERE id = ?";
-        Connection conn = null;
-        boolean success = false;
 
-        try {
-            conn = DBConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-
-            if (player.getGameRoomId() != null && player.getGameRoomId() > 0) {
-                 pstmt.setLong(1, player.getGameRoomId());
-             } else {
-                 pstmt.setNull(1, Types.BIGINT);
-             }
-            pstmt.setInt(2, player.getScore());
-            pstmt.setLong(3, player.getId());
-
-            success = pstmt.executeUpdate() > 0;
-            if (success) {
-                conn.commit();
-                System.out.println("Joueur mis à jour avec succès - ID: " + player.getId());
-            } else {
-                conn.rollback();
-            }
-             pstmt.close();
-        } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    System.err.println("Erreur lors du rollback - " + ex.getMessage());
-                }
-            }
-            System.err.println("Erreur lors de la mise à jour du joueur - " + e.getMessage());
-        }
-         return success;
-    }
-    
-    public boolean delete(Long id) {
-        String sql = "DELETE FROM player WHERE id = ?";
-        Connection conn = null;
-        boolean success = false;
-
-        try {
-            conn = DBConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-
-            pstmt.setLong(1, id);
-
-            success = pstmt.executeUpdate() > 0;
-            if (success) {
-                conn.commit();
-                System.out.println("Joueur supprimé avec succès - ID: " + id);
-            } else {
-                conn.rollback();
-            }
-            pstmt.close();
-        } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    System.err.println("Erreur lors du rollback - " + ex.getMessage());
-                }
-            }
-            System.err.println("Erreur lors de la suppression du joueur - " + e.getMessage());
-        }
-         return success;
-    }
-    
-    private Player mapResultSetToPlayer(ResultSet rs) throws SQLException {
-        Player player = new Player();
-        player.setId(rs.getLong("id"));
+    public void updateScore(Long playerId, Long gameRoomId, int newScore) {
+        String query = "UPDATE player SET score = ? WHERE id = ? AND gameroom_id = ?";
         
-        long gameRoomId = rs.getLong("gameroom_id");
-        if (rs.wasNull()) {
-            player.setGameRoomId(null);
-        } else {
-            player.setGameRoomId(gameRoomId);
-            if (gameRoomDAO != null) { 
-                GameRoom gameRoom = gameRoomDAO.findById(gameRoomId);
-                if (gameRoom != null) {
-                    player.setGameRoom(gameRoom);
-                }
-            } else {
-                System.err.println("Avertissement: GameRoomDAO non initialisé dans PlayerDAO lors du chargement de la salle pour le joueur " + player.getId());
-            }
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setInt(1, newScore);
+            stmt.setLong(2, playerId);
+            stmt.setLong(3, gameRoomId);
+            
+            stmt.executeUpdate();
+            DatabaseConnection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            DatabaseConnection.rollback();
         }
-        player.setScore(rs.getInt("score"));
-        player.setCreated(rs.getTimestamp("created").toLocalDateTime());
+    }
 
-        return player;
+    public Player getPlayer(Long playerId, Long gameRoomId) {
+        String query = "SELECT p.*, u.username FROM player p " +
+                      "JOIN user1 u ON p.id = u.userID " +
+                      "WHERE p.id = ? AND p.gameroom_id = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setLong(1, playerId);
+            stmt.setLong(2, gameRoomId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Player player = new Player();
+                player.setId(rs.getLong("id"));
+                player.setGameRoomId(rs.getLong("gameroom_id"));
+                player.setScore(rs.getInt("score"));
+                player.setUsername(rs.getString("username"));
+                if (gameRoomDAO != null) {
+                    player.setGameRoomName(gameRoomDAO.getGameRoomName(gameRoomId));
+                }
+                return player;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void initializeTestData() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // Vérifier si la table est vide
+            String countQuery = "SELECT COUNT(*) FROM player";
+            try (PreparedStatement countStmt = conn.prepareStatement(countQuery)) {
+                ResultSet rs = countStmt.executeQuery();
+                if (rs.next() && rs.getInt(1) == 0) {
+                    // Insérer des données de test
+                    String insertQuery = "INSERT INTO player (id, gameroom_id, score, created) VALUES " +
+                                      "(1, 3, 100, NOW()), " +
+                                      "(2, 3, 150, NOW()), " +
+                                      "(3, 3, 75, NOW()), " +
+                                      "(1, 4, 200, NOW()), " +
+                                      "(2, 4, 180, NOW()), " +
+                                      "(3, 4, 160, NOW()), " +
+                                      "(1, 9, 300, NOW()), " +
+                                      "(2, 9, 250, NOW()), " +
+                                      "(3, 9, 275, NOW()), " +
+                                      "(1, 11, 400, NOW()), " +
+                                      "(2, 11, 350, NOW()), " +
+                                      "(3, 11, 375, NOW()) " +
+                                      "ON DUPLICATE KEY UPDATE score = VALUES(score), created = VALUES(created)";
+                    
+                    try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
+                        insertStmt.executeUpdate();
+                    }
+                    DatabaseConnection.commit();
+                    System.out.println("Données de test insérées avec succès dans la table player");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            DatabaseConnection.rollback();
+            System.err.println("Erreur lors de l'initialisation des données de test - " + e.getMessage());
+        }
     }
 }

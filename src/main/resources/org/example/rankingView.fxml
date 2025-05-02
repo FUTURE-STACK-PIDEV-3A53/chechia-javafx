@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controller.RankingController"
+      spacing="10">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label text="Classement des Joueurs" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    
+    <TableView fx:id="rankingTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="usernameColumn" text="Joueur" prefWidth="200"/>
+            <TableColumn fx:id="scoreColumn" text="Score" prefWidth="100"/>
+        </columns>
+    </TableView>
+</VBox> 

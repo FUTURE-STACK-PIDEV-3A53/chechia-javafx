@@ -2,6 +2,7 @@ package org.example.dao;
 
 import org.example.db.DBConnection;
 import org.example.model.Game;
+import org.example.utils.DatabaseConnection;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -9,6 +10,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameDAO {
+    private static GameDAO instance;
+    private final Connection connection;
+
+    private GameDAO() {
+        try {
+            connection = DatabaseConnection.getConnection();
+            createTableIfNotExists();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to initialize GameDAO: " + e.getMessage(), e);
+        }
+    }
+
+    public static GameDAO getInstance() {
+        if (instance == null) {
+            instance = new GameDAO();
+        }
+        return instance;
+    }
+
+    private void createTableIfNotExists() throws SQLException {
+        String sql = "CREATE TABLE IF NOT EXISTS game (" +
+                "id BIGINT PRIMARY KEY AUTO_INCREMENT," +
+                "name VARCHAR(255) NOT NULL," +
+                "picture VARCHAR(255)," +
+                "description TEXT," +
+                "number_of_players INT," +
+                "file_path VARCHAR(255)," +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                ")";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(sql);
+        }
+    }
+
     public Game save(Game game) {
         String sql = "INSERT INTO game (name, picture, description, number_of_players, file_path, created_at) VALUES (?, ?, ?, ?, ?, ?)";
         Connection conn = null;
@@ -33,7 +68,7 @@ public class GameDAO {
                     }
                 }
                 conn.commit();
-                System.out.println("Jeu enregistré avec succès - ID: " + game.getId());
+                System.out.println("Game saved successfully - ID: " + game.getId());
             }
         } catch (SQLException e) {
             if (conn != null) {
@@ -86,41 +121,29 @@ public class GameDAO {
     }
     
     public boolean update(Game game) {
-        String sql = "UPDATE game SET name = ?, picture = ?, description = ?, number_of_players = ?, file_path = ?, created_at = ? WHERE id = ?";
-        Connection conn = null;
-        boolean success = false;
-
-        try {
-            conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
+        String sql = "UPDATE game SET name = ?, picture = ?, description = ?, number_of_players = ?, file_path = ? WHERE id = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, game.getName());
             pstmt.setString(2, game.getPicture());
             pstmt.setString(3, game.getDescription());
             pstmt.setInt(4, game.getNumber_of_players());
             pstmt.setString(5, game.getFile_path());
-            pstmt.setTimestamp(6, Timestamp.valueOf(game.getCreated_at()));
-            pstmt.setLong(7, game.getId());
+            pstmt.setLong(6, game.getId());
 
-            success = pstmt.executeUpdate() > 0;
-            if (success) {
-                conn.commit();
-                System.out.println("Jeu mis à jour avec succès - ID: " + game.getId());
-            } else {
-                 conn.rollback();
+            int rowsAffected = pstmt.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                System.out.println("Game updated successfully - ID: " + game.getId());
+                return true;
             }
-             pstmt.close();
         } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    System.err.println("Erreur lors du rollback - " + ex.getMessage());
-                }
-            }
-            System.err.println("Erreur lors de la mise à jour du jeu - " + e.getMessage());
+            System.err.println("Error updating game: " + e.getMessage());
+            e.printStackTrace();
         }
-         return success;
+        return false;
     }
     
     public boolean delete(Long id) {

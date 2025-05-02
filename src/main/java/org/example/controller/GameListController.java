@@ -55,17 +55,19 @@ public class GameListController {
     private FilteredList<Game> filteredGames;
     private boolean sortAscending = true;
 
+    @FXML
     public void initialize() {
         try {
-            gameDAO = new GameDAO();
+            gameDAO = GameDAO.getInstance();
             setupTableColumns();
             setupSearch();
             loadGames();
+            
+            // Cacher les boutons admin au démarrage
             setAdminButtonsVisible(false);
         } catch (Exception e) {
-            System.err.println("Error initializing GameListController: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Initialization Error", "Failed to initialize the game list.");
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not initialize the game list.");
         }
     }
 
@@ -202,15 +204,25 @@ public class GameListController {
                 setAdminButtonsVisible(true);
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Admin access granted!");
             } else {
+                setAdminButtonsVisible(false);
                 showAlert(Alert.AlertType.ERROR, "Error", "Invalid admin code!");
             }
         });
     }
 
     private void setAdminButtonsVisible(boolean visible) {
-        addButton.setVisible(visible);
-        editButton.setVisible(visible);
-        deleteButton.setVisible(visible);
+        if (addButton != null) {
+            addButton.setVisible(visible);
+            addButton.setManaged(visible);
+        }
+        if (editButton != null) {
+            editButton.setVisible(visible);
+            editButton.setManaged(visible);
+        }
+        if (deleteButton != null) {
+            deleteButton.setVisible(visible);
+            deleteButton.setManaged(visible);
+        }
     }
 
     @FXML
@@ -259,22 +271,84 @@ public class GameListController {
 
     private void showGameForm(Game game) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gameForm.fxml"));
+            System.out.println("Attempting to load game form...");
+            
+            // Get the FXML loader
+            FXMLLoader loader = new FXMLLoader();
+            String fxmlPath = "/org/example/gameForm.fxml";
+            System.out.println("Looking for FXML at: " + fxmlPath);
+            
+            loader.setLocation(getClass().getResource(fxmlPath));
+            if (loader.getLocation() == null) {
+                // Try alternate path
+                fxmlPath = "/gameForm.fxml";
+                System.out.println("First path not found, trying alternate path: " + fxmlPath);
+                loader.setLocation(getClass().getResource(fxmlPath));
+            }
+            
+            if (loader.getLocation() == null) {
+                throw new IOException("Could not find gameForm.fxml in resources");
+            }
+            
+            System.out.println("Found FXML at: " + loader.getLocation());
+            
+            // Load the FXML
             Parent root = loader.load();
+            if (root == null) {
+                throw new IOException("Failed to load game form FXML");
+            }
+            System.out.println("FXML loaded successfully");
 
+            // Get and initialize the controller
             GameFormController controller = loader.getController();
+            if (controller == null) {
+                throw new IOException("Failed to get GameFormController");
+            }
             controller.setGame(game);
+            System.out.println("Controller initialized with game: " + (game != null ? game.getId() : "new game"));
 
+            // Create and configure the stage
             Stage stage = new Stage();
             stage.setTitle(game == null ? "Add New Game" : "Edit Game");
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.setOnHidden(e -> loadGames());
+            
+            // Create and set the scene
+            Scene scene = new Scene(root);
+            try {
+                String cssPath = "/styles.css";
+                if (getClass().getResource(cssPath) != null) {
+                    System.out.println("Loading CSS from: " + cssPath);
+                    scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+                } else {
+                    System.out.println("Warning: Could not find styles.css");
+                }
+            } catch (Exception e) {
+                System.err.println("Warning: Could not load CSS: " + e.getMessage());
+            }
+            
+            stage.setScene(scene);
+            
+            // Add reload handler
+            stage.setOnHidden(e -> {
+                System.out.println("Form closed, reloading games...");
+                loadGames();
+                gameTableView.refresh();
+            });
+            
+            // Show the form
+            System.out.println("Showing game form dialog");
             stage.showAndWait();
 
         } catch (IOException e) {
+            System.err.println("Error loading game form: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "Could not load the game form.");
+            showAlert(Alert.AlertType.ERROR, "Error", 
+                     "Could not load the game form: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", 
+                     "An unexpected error occurred: " + e.getMessage());
         }
     }
 

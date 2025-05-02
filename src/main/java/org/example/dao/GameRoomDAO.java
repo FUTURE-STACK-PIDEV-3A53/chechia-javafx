@@ -1,9 +1,8 @@
 package org.example.dao;
 
-import org.example.db.DBConnection;
 import org.example.model.Game;
 import org.example.model.GameRoom;
-import org.example.model.Player;
+import org.example.utils.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,19 +10,37 @@ import java.util.List;
 
 public class GameRoomDAO {
     private static GameRoomDAO instance;
-    private final GameDAO gameDAO = new GameDAO();
-    private PlayerDAO playerDAO;
+    private final GameDAO gameDAO;
+    private final Connection connection;
+
+    private GameRoomDAO() {
+        try {
+            connection = DatabaseConnection.getConnection();
+            gameDAO = GameDAO.getInstance();
+            createTableIfNotExists();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to initialize GameRoomDAO: " + e.getMessage(), e);
+        }
+    }
 
     public static GameRoomDAO getInstance() {
         if (instance == null) {
             instance = new GameRoomDAO();
-            PlayerDAO.getInstance().setGameRoomDAO(instance);
         }
         return instance;
     }
 
-    private GameRoomDAO() {
-        // Le constructeur est privé pour le pattern Singleton
+    private void createTableIfNotExists() throws SQLException {
+        String sql = "CREATE TABLE IF NOT EXISTS gameroom (" +
+                "id BIGINT PRIMARY KEY AUTO_INCREMENT," +
+                "game_id BIGINT NOT NULL," +
+                "location VARCHAR(255) NOT NULL," +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                "FOREIGN KEY (game_id) REFERENCES game(id)" +
+                ")";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(sql);
+        }
     }
     
     public GameRoom save(GameRoom gameRoom) {
@@ -31,7 +48,7 @@ public class GameRoomDAO {
         Connection conn = null;
         
         try {
-            conn = DBConnection.getConnection();
+            conn = DatabaseConnection.getConnection();
             try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 pstmt.setLong(1, gameRoom.getGameId());
                 pstmt.setString(2, gameRoom.getLocation());
@@ -48,7 +65,7 @@ public class GameRoomDAO {
                     }
                 }
                 conn.commit();
-                System.out.println("Salle de jeu enregistrée avec succès - ID: " + gameRoom.getId());
+                System.out.println("Game room saved successfully - ID: " + gameRoom.getId());
             }
         } catch (SQLException e) {
             if (conn != null) {
@@ -67,7 +84,7 @@ public class GameRoomDAO {
     public GameRoom findById(Long id) {
         String sql = "SELECT * FROM gameroom WHERE id = ?";
         
-        try (Connection conn = DBConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setLong(1, id);
@@ -86,25 +103,29 @@ public class GameRoomDAO {
     public List<GameRoom> findAll() {
         List<GameRoom> gameRooms = new ArrayList<>();
         String sql = "SELECT gr.*, g.name as game_name FROM gameroom gr LEFT JOIN game g ON gr.game_id = g.id";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-            
+        try {
+            conn = DatabaseConnection.getConnection();
+            pstmt = conn.prepareStatement(sql);
             System.out.println("Executing query: " + sql);
+            rs = pstmt.executeQuery();
             
+            // First, collect all basic game room information
             while (rs.next()) {
                 GameRoom room = new GameRoom();
                 room.setId(rs.getLong("id"));
                 
-                // Handle game relationship
+                // Store basic game information
                 Long gameId = rs.getLong("game_id");
                 if (!rs.wasNull()) {
                     room.setGameId(gameId);
-                    Game game = new Game();
-                    game.setId(gameId);
-                    game.setName(rs.getString("game_name"));
-                    room.setGame(game);
+                    Game basicGame = new Game();
+                    basicGame.setId(gameId);
+                    basicGame.setName(rs.getString("game_name"));
+                    room.setGame(basicGame);
                 }
                 
                 room.setLocation(rs.getString("location"));
@@ -114,19 +135,41 @@ public class GameRoomDAO {
                 }
                 room.setBotEnabled(rs.getBoolean("bot_enabled"));
                 
+                gameRooms.add(room);
+            }
+            
+            // Close the first result set and statement
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            
+            // Now, for each game room, load the complete game information in a separate connection
+            for (GameRoom room : gameRooms) {
+                if (room.getGameId() != null) {
+                    Game game = gameDAO.findById(room.getGameId());
+                    if (game != null) {
+                        room.setGame(game);
+                    }
+                }
+                
                 System.out.println("Mapped GameRoom: ID=" + room.getId() + 
                                 ", Location=" + room.getLocation() + 
                                 ", GameID=" + room.getGameId() +
                                 ", Game=" + (room.getGame() != null ? room.getGame().getName() : "null"));
-                
-                gameRooms.add(room);
             }
             
-            System.out.println("Total GameRooms found: " + gameRooms.size());
+            System.out.println("Found " + gameRooms.size() + " game rooms");
             
         } catch (SQLException e) {
             System.err.println("Error in findAll(): " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
         }
         return gameRooms;
     }
@@ -135,7 +178,7 @@ public class GameRoomDAO {
         List<GameRoom> gameRooms = new ArrayList<>();
         String sql = "SELECT * FROM gameroom WHERE game_id = ?";
         
-        try (Connection conn = DBConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setLong(1, gameId);
@@ -157,7 +200,7 @@ public class GameRoomDAO {
         boolean success = false;
 
         try {
-            conn = DBConnection.getConnection();
+            conn = DatabaseConnection.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             if (gameRoom.getGameId() != null && gameRoom.getGameId() > 0) {
@@ -197,7 +240,7 @@ public class GameRoomDAO {
         boolean success = false;
 
         try {
-            conn = DBConnection.getConnection();
+            conn = DatabaseConnection.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             pstmt.setLong(1, id);
@@ -244,5 +287,22 @@ public class GameRoomDAO {
         gameRoom.setBotEnabled(rs.getBoolean("bot_enabled"));
         
         return gameRoom;
+    }
+
+    public String getGameRoomName(Long gameRoomId) {
+        String query = "SELECT name FROM gameroom WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setLong(1, gameRoomId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -1,21 +1,30 @@
 package org.example.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.dao.GameDAO;
+import org.example.dao.RiddleDAO;
 import org.example.model.Game;
+import org.example.model.Riddle;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class GameFormController {
 
@@ -39,21 +48,29 @@ public class GameFormController {
     private Button saveButton;
     @FXML
     private Button cancelButton;
+    
+    // Riddles components
+    @FXML private TableView<Riddle> riddlesTable;
+    @FXML private TableColumn<Riddle, String> questionColumn;
+    @FXML private TableColumn<Riddle, String> answerColumn;
+    @FXML private TextField riddleQuestionField;
+    @FXML private TextField riddleAnswerField;
+    @FXML private Button addRiddleButton;
+    @FXML private Button removeRiddleButton;
 
     private GameDAO gameDAO;
+    private RiddleDAO riddleDAO;
     private Game currentGame;
     private boolean isEditMode = false;
+    private ObservableList<Riddle> riddles = FXCollections.observableArrayList();
 
-    public void initialize() {
-        try {
-            gameDAO = new GameDAO();
-            setupValidation();
-            setupImagePreview();
-        } catch (Exception e) {
-            System.err.println("Error initializing GameFormController: " + e.getMessage());
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Initialization Error", "Failed to initialize the game form.");
-        }
+    @FXML
+    private void initialize() {
+        gameDAO = GameDAO.getInstance();
+        riddleDAO = RiddleDAO.getInstance();
+        setupValidation();
+        setupImagePreview();
+        setupRiddlesTable();
     }
 
     private void setupValidation() {
@@ -69,6 +86,12 @@ public class GameFormController {
         picturePathField.textProperty().addListener((obs, oldVal, newVal) -> updateImagePreview(newVal));
     }
 
+    private void setupRiddlesTable() {
+        questionColumn.setCellValueFactory(new PropertyValueFactory<>("question"));
+        answerColumn.setCellValueFactory(new PropertyValueFactory<>("answer"));
+        riddlesTable.setItems(riddles);
+    }
+
     public void setGame(Game game) {
         try {
             this.currentGame = game;
@@ -81,6 +104,10 @@ public class GameFormController {
                 picturePathField.setText(game.getPicture());
                 filePathField.setText(game.getFile_path());
                 updateImagePreview(game.getPicture());
+                
+                // Load riddles
+                List<Riddle> gameRiddles = riddleDAO.findByGameId(game.getId());
+                riddles.setAll(gameRiddles);
             } else {
                 isEditMode = false;
                 titleLabel.setText("Add New Game");
@@ -129,6 +156,33 @@ public class GameFormController {
     }
 
     @FXML
+    private void handleAddRiddle() {
+        String question = riddleQuestionField.getText().trim();
+        String answer = riddleAnswerField.getText().trim();
+
+        if (question.isEmpty() || answer.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Invalid Input", "Both question and answer are required.");
+            return;
+        }
+
+        Riddle riddle = new Riddle(question, answer);
+        riddles.add(riddle);
+        riddleQuestionField.clear();
+        riddleAnswerField.clear();
+        updateRiddlesTable();
+    }
+
+    @FXML
+    private void handleRemoveRiddle() {
+        Riddle selectedRiddle = riddlesTable.getSelectionModel().getSelectedItem();
+        if (selectedRiddle != null) {
+            riddles.remove(selectedRiddle);
+        } else {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a riddle to remove.");
+        }
+    }
+
+    @FXML
     private void handleSave(ActionEvent event) {
         if (!validateForm()) {
             return;
@@ -144,10 +198,16 @@ public class GameFormController {
             } else {
                 Game savedGame = gameDAO.save(gameToSave);
                 success = savedGame != null && savedGame.getId() != null;
+                if (success) {
+                    gameToSave.setId(savedGame.getId());
+                }
             }
 
             if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Game saved successfully.");
+                // Save riddles
+                saveRiddles(gameToSave);
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Game and riddles saved successfully.");
                 closeForm();
             } else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to save the game.");
@@ -179,6 +239,10 @@ public class GameFormController {
             }
         }
 
+        if (riddles.isEmpty()) {
+            errors.append("At least one riddle is required.\n");
+        }
+
         if (errors.length() > 0) {
             showAlert(Alert.AlertType.ERROR, "Validation Error", errors.toString());
             return false;
@@ -198,6 +262,24 @@ public class GameFormController {
         }
     }
 
+    private void saveRiddles(Game game) {
+        try {
+            // Supprimer les anciennes énigmes si c'est une mise à jour
+            if (game.getId() != null) {
+                riddleDAO.deleteByGameId(game.getId());
+            }
+
+            // Sauvegarder les nouvelles énigmes
+            for (Riddle riddle : riddles) {
+                riddle.setGameId(game.getId());
+                riddleDAO.save(riddle);
+            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to save riddles: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private void handleCancel(ActionEvent event) {
         closeForm();
@@ -210,6 +292,9 @@ public class GameFormController {
         picturePathField.clear();
         filePathField.clear();
         imagePreview.setImage(null);
+        riddles.clear();
+        riddleQuestionField.clear();
+        riddleAnswerField.clear();
     }
 
     private void closeForm() {
@@ -222,7 +307,16 @@ public class GameFormController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.initOwner(cancelButton.getScene().getWindow());
+        
+        // Try to get the window from the cancel button first
+        if (cancelButton != null && cancelButton.getScene() != null && cancelButton.getScene().getWindow() != null) {
+            alert.initOwner(cancelButton.getScene().getWindow());
+        }
+        
         alert.showAndWait();
+    }
+
+    private void updateRiddlesTable() {
+        riddlesTable.setItems(riddles);
     }
 } 

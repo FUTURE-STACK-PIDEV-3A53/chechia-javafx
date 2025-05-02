@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<VBox spacing="20" styleClass="content-area" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" 
+      fx:controller="org.example.controller.GameRoomListController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Game Rooms" styleClass="title-label">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Label>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Search game rooms..." HBox.hgrow="ALWAYS"/>
+        <Button fx:id="sortByIdButton" text="Sort by ID" onAction="#handleSortById" styleClass="secondary-button"/>
+    </HBox>
+    
+    <TableView fx:id="gameRoomTableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="gameColumn" text="Game" prefWidth="150"/>
+            <TableColumn fx:id="locationColumn" text="Location" prefWidth="150"/>
+            <TableColumn fx:id="dateTimeColumn" text="Date" prefWidth="150"/>
+            <TableColumn fx:id="botEnabledColumn" text="Bot" prefWidth="50"/>
+        </columns>
+    </TableView>
+    
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="playButton" text="Jouer" onAction="#handlePlayGame" styleClass="action-button"/>
+        <Button fx:id="rankingsButton" text="Classements" onAction="#handleShowRankings" styleClass="info-button"/>
+        <Button fx:id="suggestionsButton" text="Suggestions" onAction="#handleShowSuggestions" styleClass="info-button"/>
+        <Button fx:id="chatBotButton" text="Assistant" onAction="#handleChatBot" styleClass="info-button"/>
+        <Button fx:id="downloadPDFButton" text="Télécharger PDF" onAction="#handleDownloadPDF" styleClass="info-button"/>
+        <Button fx:id="adminButton" text="Admin" onAction="#handleAdminAccess" styleClass="admin-button" visible="false"/>
+        <Button fx:id="addButton" text="Add Room" onAction="#handleAddGameRoom" styleClass="primary-button"/>
+        <Button fx:id="editButton" text="Edit Room" onAction="#handleEditRoom" styleClass="primary-button"/>
+        <Button fx:id="deleteButton" text="Delete Room" onAction="#handleDeleteRoom" styleClass="danger-button"/>
+    </HBox>
+    
+    <stylesheets>
+        <URL value="@styles.css"/>
+    </stylesheets>
+</VBox> 

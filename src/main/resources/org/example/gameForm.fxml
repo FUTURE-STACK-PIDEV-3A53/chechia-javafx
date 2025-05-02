@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox spacing="20" styleClass="content-area" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.GameFormController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header Section -->
+    <HBox styleClass="header-section" alignment="CENTER_LEFT">
+        <padding>
+            <Insets top="10" right="20" bottom="10" left="20"/>
+        </padding>
+        <Label fx:id="titleLabel" styleClass="title-label" text="Add New Game"/>
+    </HBox>
+
+    <!-- Form Content -->
+    <ScrollPane fitToWidth="true" styleClass="form-scroll-pane">
+        <VBox spacing="15">
+            <!-- Basic Info Section -->
+            <TitledPane text="Basic Information" expanded="true">
+                <VBox spacing="10">
+                    <!-- Game Name -->
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        <Label text="Name:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="nameField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    </GridPane>
+
+                    <!-- Description -->
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        <Label text="Description:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextArea fx:id="descriptionArea" styleClass="form-field" prefRowCount="3" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    </GridPane>
+
+                    <!-- Number of Players -->
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        <Label text="Players:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="playersField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    </GridPane>
+                </VBox>
+            </TitledPane>
+
+            <!-- Image Section -->
+            <TitledPane text="Game Image" expanded="true">
+                <VBox spacing="10">
+                    <!-- Picture Path -->
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        <Label text="Picture:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <TextField fx:id="picturePathField" styleClass="form-field" HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="browseButton" text="Browse" onAction="#handleBrowsePicture" styleClass="secondary-button"/>
+                        </HBox>
+                    </GridPane>
+
+                    <!-- Image Preview -->
+                    <VBox spacing="5">
+                        <Label text="Preview:" styleClass="form-label"/>
+                        <StackPane styleClass="image-preview-container" prefHeight="200">
+                            <ImageView fx:id="imagePreview" fitWidth="200" fitHeight="200" preserveRatio="true"/>
+                        </StackPane>
+                    </VBox>
+                </VBox>
+            </TitledPane>
+
+            <!-- Riddles Section -->
+            <TitledPane text="Game Riddles" expanded="true">
+                <VBox spacing="10">
+                    <!-- Riddles Table -->
+                    <TableView fx:id="riddlesTable" VBox.vgrow="ALWAYS" prefHeight="200">
+                        <columns>
+                            <TableColumn fx:id="questionColumn" text="Question" prefWidth="300"/>
+                            <TableColumn fx:id="answerColumn" text="Answer" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+
+                    <!-- Add Riddle Section -->
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        
+                        <Label text="Question:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="riddleQuestionField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        
+                        <Label text="Answer:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="riddleAnswerField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    </GridPane>
+
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button fx:id="addRiddleButton" text="Add Riddle" onAction="#handleAddRiddle" styleClass="secondary-button"/>
+                        <Button fx:id="removeRiddleButton" text="Remove Selected" onAction="#handleRemoveRiddle" styleClass="danger-button"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+
+            <!-- File Path -->
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="File Path:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="filePathField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            </GridPane>
+        </VBox>
+    </ScrollPane>
+
+    <!-- Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="saveButton" text="Save" onAction="#handleSave" styleClass="primary-button"/>
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" styleClass="secondary-button"/>
+    </HBox>
+</VBox> 

@@ -137,6 +137,10 @@ public class GameRoom {
         }
     }
 
+    public Player getPlayer() {
+        return players.isEmpty() ? null : players.get(0);
+    }
+
     @Override
     public String toString() {
         return name + (description != null ? " - " + description : "");

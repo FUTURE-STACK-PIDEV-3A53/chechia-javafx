@@ -45,9 +45,10 @@ public class GameRoomFormController {
     private boolean isEditMode = false;
     private ObservableList<Game> availableGames;
 
+    @FXML
     public void initialize() {
+        gameDAO = GameDAO.getInstance();
         gameRoomDAO = GameRoomDAO.getInstance(); // Handle potential init errors
-        gameDAO = new GameDAO();
         loadAvailableGames();
         setupGameComboBox();
         addNumericListeners();

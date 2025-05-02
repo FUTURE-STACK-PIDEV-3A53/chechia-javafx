@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<VBox spacing="20" styleClass="content-area" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" 
+      fx:controller="org.example.controller.GameListController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Manage Games" styleClass="title-label">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Label>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Search games..." HBox.hgrow="ALWAYS"/>
+        <Button fx:id="sortByIdButton" text="Sort by ID" onAction="#handleSortById" styleClass="secondary-button"/>
+    </HBox>
+    
+    <TableView fx:id="gameTableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="nameColumn" text="Name" prefWidth="200"/>
+            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="400"/>
+        </columns>
+    </TableView>
+    
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="adminButton" text="Admin Access" onAction="#handleAdminAccess" styleClass="admin-button"/>
+        <Button fx:id="addButton" text="Add Game" onAction="#handleAddGame" styleClass="primary-button"/>
+        <Button fx:id="editButton" text="Edit Game" onAction="#handleEditGame" styleClass="secondary-button"/>
+        <Button fx:id="deleteButton" text="Delete Game" onAction="#handleDeleteGame" styleClass="danger-button"/>
+    </HBox>
+    
+    <stylesheets>
+        <URL value="@styles.css"/>
+    </stylesheets>
+</VBox> 

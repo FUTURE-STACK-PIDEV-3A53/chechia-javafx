@@ -7,28 +7,24 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 
+import java.io.IOException;
+
 public class App extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        try {
-            // Load the main interface directly
-            Parent root = FXMLLoader.load(getClass().getResource("/main.fxml")); 
-            Scene scene = new Scene(root);
-            primaryStage.setTitle("Game Room Management"); // Set main window title
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Application Error");
-            alert.setHeaderText("Failed to load the application interface.");
-            alert.setContentText("An unexpected error occurred: " + e.getMessage());
-            alert.showAndWait();
-        }
+    public void start(Stage stage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/Login.fxml"));
+        Parent root = loader.load();
+        
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/org/example/styles.css").toExternalForm());
+        
+        stage.setTitle("Game Platform - Login");
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void main(String[] args) {
-        launch(args);
+        launch();
     }
 }

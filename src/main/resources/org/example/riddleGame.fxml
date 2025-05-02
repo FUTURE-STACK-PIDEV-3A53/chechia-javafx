@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="20" styleClass="game-content" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.RiddleGameController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header Section -->
+    <HBox styleClass="header-section" alignment="CENTER">
+        <VBox alignment="CENTER" spacing="10">
+            <Label fx:id="gameTitleLabel" styleClass="game-title" text="Game Title"/>
+            <Label fx:id="scoreLabel" styleClass="score-label" text="Score: 0"/>
+        </VBox>
+    </HBox>
+
+    <!-- Riddle Section -->
+    <VBox spacing="15" styleClass="riddle-section">
+        <Label text="Question:" styleClass="section-label"/>
+        <TextArea fx:id="questionArea" styleClass="question-area" wrapText="true" editable="false"/>
+        
+        <Label text="Your Answer:" styleClass="section-label"/>
+        <TextField fx:id="answerField" styleClass="answer-field"/>
+        
+        <Label fx:id="feedbackLabel" styleClass="feedback-label"/>
+        
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="submitButton" text="Submit Answer" onAction="#handleSubmitAnswer" styleClass="primary-button"/>
+            <Button fx:id="nextButton" text="Next Question" onAction="#handleNextQuestion" styleClass="secondary-button"/>
+        </HBox>
+    </VBox>
+
+    <!-- Bottom Section -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="exitButton" text="Exit Game" onAction="#handleExit" styleClass="danger-button"/>
+    </HBox>
+</VBox> 

@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 
 public class Player {
     private Long id;
-    private Long gameroomId;
+    private Long gameRoomId;
     private int score;
+    private String username;
+    private String gameRoomName;
     private LocalDateTime created;
     private GameRoom gameRoom;
 
@@ -13,8 +15,9 @@ public class Player {
 
     public Player(GameRoom gameRoom, int score) {
         this.gameRoom = gameRoom;
-        this.gameroomId = gameRoom.getId();
+        this.gameRoomId = gameRoom.getId();
         this.score = score;
+        this.gameRoomName = gameRoom.getName();
         this.created = LocalDateTime.now();
     }
 
@@ -28,11 +31,11 @@ public class Player {
     }
 
     public Long getGameRoomId() {
-        return gameroomId;
+        return gameRoomId;
     }
 
-    public void setGameRoomId(Long gameroomId) {
-        this.gameroomId = gameroomId;
+    public void setGameRoomId(Long gameRoomId) {
+        this.gameRoomId = gameRoomId;
     }
 
     public int getScore() {
@@ -41,6 +44,22 @@ public class Player {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getGameRoomName() {
+        return gameRoomName;
+    }
+
+    public void setGameRoomName(String gameRoomName) {
+        this.gameRoomName = gameRoomName;
     }
 
     public LocalDateTime getCreated() {
@@ -57,6 +76,6 @@ public class Player {
 
     public void setGameRoom(GameRoom gameRoom) {
         this.gameRoom = gameRoom;
-        this.gameroomId = gameRoom.getId();
+        this.gameRoomId = gameRoom.getId();
     }
 }

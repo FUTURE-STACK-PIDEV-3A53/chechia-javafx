@@ -1,102 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Text?>
 
-<VBox spacing="20.0" styleClass="dialog-content" style="-fx-background: #1a1a1a;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.GameFormController">
-    <!-- Title Section -->
-    <HBox styleClass="dialog-header" style="-fx-background-color: #2b2b2b; -fx-padding: 20;">
-        <Label fx:id="titleLabel" text="Add New Game" styleClass="dialog-title" 
-               style="-fx-text-fill: #ff0000; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+<VBox spacing="20" styleClass="content-area" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.GameFormController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header Section -->
+    <HBox styleClass="header-section" alignment="CENTER_LEFT">
+        <padding>
+            <Insets top="10" right="20" bottom="10" left="20"/>
+        </padding>
+        <Label fx:id="titleLabel" styleClass="title-label" text="Add New Game"/>
     </HBox>
 
     <!-- Form Content -->
-    <ScrollPane fitToWidth="true" styleClass="edge-to-edge" style="-fx-background-color: transparent; -fx-background: transparent;">
-        <VBox spacing="20.0" style="-fx-padding: 20; -fx-background-color: #1a1a1a;">
-            <GridPane hgap="15.0" vgap="15.0" styleClass="form-grid">
+    <ScrollPane fitToWidth="true" styleClass="form-scroll-pane">
+        <VBox spacing="15">
+            <!-- Game Name -->
+            <GridPane hgap="10" vgap="10">
                 <columnConstraints>
-                    <ColumnConstraints hgrow="NEVER" minWidth="120.0"/>
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="250.0"/>
+                    <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
                 </columnConstraints>
-
-                <!-- Name Field -->
-                <Label text="Name:" styleClass="form-label" 
-                       style="-fx-font-weight: bold; -fx-text-fill: white;" GridPane.rowIndex="0"/>
-                <TextField fx:id="nameField" styleClass="form-field" 
-                          style="-fx-padding: 8; -fx-background-radius: 4; -fx-background-color: #2b2b2b;
-                                 -fx-text-fill: white; -fx-border-color: #404040; -fx-border-radius: 4;" 
-                          GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-                <!-- Description Field -->
-                <Label text="Description:" styleClass="form-label" 
-                       style="-fx-font-weight: bold; -fx-text-fill: white;" GridPane.rowIndex="1"/>
-                <TextArea fx:id="descriptionArea" styleClass="form-field" 
-                         style="-fx-padding: 8; -fx-background-radius: 4; -fx-background-color: #2b2b2b;
-                                -fx-text-fill: white; -fx-border-color: #404040; -fx-border-radius: 4;
-                                -fx-control-inner-background: #2b2b2b;"
-                         wrapText="true" prefRowCount="3" 
-                         GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-                <!-- Players Field -->
-                <Label text="# Players:" styleClass="form-label" 
-                       style="-fx-font-weight: bold; -fx-text-fill: white;" GridPane.rowIndex="2"/>
-                <TextField fx:id="playersField" styleClass="form-field" 
-                          style="-fx-padding: 8; -fx-background-radius: 4; -fx-background-color: #2b2b2b;
-                                 -fx-text-fill: white; -fx-border-color: #404040; -fx-border-radius: 4;" 
-                          GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-
-                <!-- Picture Path Field -->
-                <Label text="Picture:" styleClass="form-label" 
-                       style="-fx-font-weight: bold; -fx-text-fill: white;" GridPane.rowIndex="3"/>
-                <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                    <TextField fx:id="picturePathField" styleClass="form-field" 
-                              style="-fx-padding: 8; -fx-background-radius: 4; -fx-background-color: #2b2b2b;
-                                     -fx-text-fill: white; -fx-border-color: #404040; -fx-border-radius: 4;" 
-                              HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="browseButton" text="Browse..." 
-                            onAction="#handleBrowsePicture" 
-                            styleClass="action-button"
-                            style="-fx-background-color: #404040; -fx-text-fill: white; 
-                                   -fx-padding: 8 15; -fx-background-radius: 4;"/>
-                </HBox>
-
-                <!-- File Path Field -->
-                <Label text="File Path:" styleClass="form-label" 
-                       style="-fx-font-weight: bold; -fx-text-fill: white;" GridPane.rowIndex="4"/>
-                <TextField fx:id="filePathField" styleClass="form-field" 
-                          style="-fx-padding: 8; -fx-background-radius: 4; -fx-background-color: #2b2b2b;
-                                 -fx-text-fill: white; -fx-border-color: #404040; -fx-border-radius: 4;" 
-                          GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-
-                <!-- Image Preview -->
-                <Label text="Preview:" styleClass="form-label" 
-                       style="-fx-font-weight: bold; -fx-text-fill: white;" GridPane.rowIndex="5"/>
-                <StackPane styleClass="image-preview-container" 
-                          style="-fx-background-color: #2b2b2b; -fx-padding: 10; 
-                                 -fx-border-color: #404040; -fx-border-radius: 4; 
-                                 -fx-background-radius: 4;" 
-                          GridPane.columnIndex="1" GridPane.rowIndex="5">
-                    <ImageView fx:id="imagePreview" fitHeight="150.0" fitWidth="200.0" 
-                              preserveRatio="true"/>
-                </StackPane>
+                <Label text="Name:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="nameField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
             </GridPane>
+
+            <!-- Description -->
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="Description:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextArea fx:id="descriptionArea" styleClass="form-field" prefRowCount="3" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            </GridPane>
+
+            <!-- Number of Players -->
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="Players:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="playersField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            </GridPane>
+
+            <!-- Picture Path -->
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="Picture:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <TextField fx:id="picturePathField" styleClass="form-field" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="browseButton" text="Browse" onAction="#handleBrowsePicture" styleClass="secondary-button"/>
+                </HBox>
+            </GridPane>
+
+            <!-- File Path -->
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="File Path:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="filePathField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            </GridPane>
+
+            <!-- Image Preview -->
+            <VBox spacing="5">
+                <Label text="Preview:" styleClass="form-label"/>
+                <StackPane styleClass="image-preview-container" prefHeight="200">
+                    <ImageView fx:id="imagePreview" fitWidth="200" fitHeight="200" preserveRatio="true"/>
+                </StackPane>
+            </VBox>
         </VBox>
     </ScrollPane>
 
-    <!-- Buttons Section -->
-    <HBox spacing="10.0" alignment="CENTER_RIGHT" styleClass="dialog-buttons" 
-          style="-fx-padding: 20; -fx-background-color: #2b2b2b; -fx-border-color: #404040; 
-                 -fx-border-width: 1 0 0 0;">
-        <Button fx:id="saveButton" text="Save" onAction="#handleSave" 
-                styleClass="primary-button"
-                style="-fx-background-color: #ff0000; -fx-text-fill: white; 
-                       -fx-padding: 10 20; -fx-background-radius: 4;"/>
-        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" 
-                styleClass="secondary-button"
-                style="-fx-background-color: #404040; -fx-text-fill: white; 
-                       -fx-padding: 10 20; -fx-background-radius: 4;"/>
+    <!-- Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="saveButton" text="Save" onAction="#handleSave" styleClass="primary-button"/>
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" styleClass="secondary-button"/>
     </HBox>
 </VBox> 
