@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="rootPane" styleClass="netflix-root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.EventAdminDashboardController">
+    <stylesheets>
+        <String fx:value="@/netflix.css" />
+    </stylesheets>
+    <top>
+        <VBox alignment="CENTER" spacing="10.0">
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="netflix-topbar">
+                <Label styleClass="netflix-logo" text="🎬 Evennement Admin" />
+                <Pane fx:id="spacer" HBox.hgrow="ALWAYS" />
+                <Button fx:id="themeToggleButton" onAction="#handleToggleTheme" styleClass="netflix-logout" text="🌓 Thème" />
+            </HBox>
+            <VBox alignment="CENTER" spacing="10.0">
+                <Label fx:id="welcomeLabel" styleClass="netflix-section-title" text="Bienvenue, Admin!">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+                <HBox alignment="CENTER" spacing="40" style="-fx-padding: 10 0 10 0;">
+                    <Label fx:id="adminEventCountLabel" styleClass="netflix-stats-label" text="Événements : 0" />
+                    <Label fx:id="adminReservationCountLabel" styleClass="netflix-stats-label" text="Réservations : 0" />
+                </HBox>
+                <Separator styleClass="netflix-separator" />
+            </VBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <GridPane alignment="CENTER" hgap="20.0" styleClass="netflix-center" vgap="20.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            
+            <!-- Row 1: Management Cards -->
+            <VBox styleClass="netflix-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </padding>
+                <Label styleClass="netflix-card-title" text="Gestion des Événements">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Separator styleClass="netflix-separator" />
+                <Label styleClass="netflix-card-text" text="Gérez tous les événements: créer, modifier, supprimer et afficher les détails." wrapText="true">
+                    <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                    </VBox.margin>
+                </Label>
+                <Button fx:id="eventsButton" maxWidth="Infinity" onAction="#handleEvents" styleClass="netflix-card-btn" text="Gérer les Événements" />
+            </VBox>
+            
+            <VBox styleClass="netflix-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </padding>
+                <Label styleClass="netflix-card-title" text="Gestion des Réservations">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Separator styleClass="netflix-separator" />
+                <Label styleClass="netflix-card-text" text="Gérez toutes les réservations: créer, modifier, supprimer et afficher les détails." wrapText="true">
+                    <VBox.margin>
+                        <Insets bottom="15.0" top="15.0" />
+                    </VBox.margin>
+                </Label>
+                <Button fx:id="reservationsButton" maxWidth="Infinity" onAction="#handleReservations" styleClass="netflix-card-btn" text="Gérer les Réservations" />
+            </VBox>
+            
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="300.0" prefWidth="350.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="300.0" prefWidth="350.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="200.0" prefHeight="250.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER" spacing="20.0" styleClass="netflix-bottom">
+            <Button onAction="#handleExit" prefWidth="150.0" styleClass="netflix-logout" text="Quitter" />
+             <Button fx:id="userFrontButton" onAction="#handleOpenUserDashboard" styleClass="netflix-logout" text="Interface Utilisateur" />
+             <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="netflix-logout" text="Déconnexion" />
+            <padding>
+                <Insets top="20.0" />
+            </padding>
+        </HBox>
+    </bottom>
+</BorderPane>

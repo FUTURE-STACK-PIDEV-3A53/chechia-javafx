@@ -102,11 +102,9 @@ public class LoginController implements Initializable {
     
     private void openAdminDashboard() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminDashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventAdminDashboard.fxml"));
             Parent root = loader.load();
-            
-            // Get the controller and set stage
-            AdminDashboardController controller = loader.getController();
+            EventAdminDashboardController controller = loader.getController();
             
             Stage dashboardStage = new Stage();
             controller.setStage(dashboardStage);

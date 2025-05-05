@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -42,7 +41,6 @@
                 <Button fx:id="loginButton" onAction="#handleLogin" styleClass="button-primary" text="Connexion" prefWidth="120.0" />
                 <Button fx:id="cancelButton" onAction="#handleCancel" styleClass="button-secondary" text="Annuler" prefWidth="120.0" />
             </HBox>
-            
             <Separator />
             
             <Button fx:id="quickLoginButton" onAction="#handleQuickLogin" styleClass="button-success" text="Accès Rapide" prefWidth="200.0">

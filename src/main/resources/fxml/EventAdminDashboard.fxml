@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.effect.DropShadow?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.example.evennement.controllers.EventAdminDashboardController"
+      style="-fx-background-color: #141414;">
+    
+    <!-- Barre de navigation supérieure -->
+    <HBox style="-fx-background-color: #000000; -fx-padding: 15px;" spacing="20">
+        <Label text="EVENT ADMIN" style="-fx-text-fill: #E50914; -fx-font-size: 24px; -fx-font-weight: bold;">
+            <effect>
+                <DropShadow color="#E50914" radius="10" spread="0.2"/>
+            </effect>
+        </Label>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Accueil" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-cursor: hand;"/>
+        <Button text="Événements" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-cursor: hand;"/>
+        <Button text="Statistiques" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-cursor: hand;"/>
+        <Button text="Déconnexion" style="-fx-text-fill: white; -fx-background-color: #E50914; -fx-cursor: hand;"/>
+    </HBox>
+
+    <!-- Contenu principal -->
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0;">
+        <VBox spacing="30" style="-fx-padding: 20px;">
+            <!-- Section Événements à venir -->
+            <VBox spacing="15">
+                <Label text="Événements à venir" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;">
+                    <effect>
+                        <DropShadow color="#E50914" radius="5" spread="0.1"/>
+                    </effect>
+                </Label>
+                <HBox spacing="20" style="-fx-padding: 10px;">
+                    <!-- Carte d'événement 1 -->
+                    <VBox style="-fx-background-color: #1A1A1A; -fx-background-radius: 8px; -fx-padding: 15px; -fx-cursor: hand;" 
+                          minWidth="300" minHeight="200">
+                        <ImageView fitWidth="280" fitHeight="150" preserveRatio="true">
+                            <Image url="@../images/event-placeholder.jpg"/>
+                        </ImageView>
+                        <Label text="Nom de l'événement" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;"/>
+                        <Label text="Date: 01/01/2024" style="-fx-text-fill: #808080;"/>
+                        <Button text="Gérer" style="-fx-background-color: #E50914; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                    </VBox>
+                    <!-- Carte d'événement 2 -->
+                    <VBox style="-fx-background-color: #1A1A1A; -fx-background-radius: 8px; -fx-padding: 15px; -fx-cursor: hand;" 
+                          minWidth="300" minHeight="200">
+                        <ImageView fitWidth="280" fitHeight="150" preserveRatio="true">
+                            <Image url="@../images/event-placeholder.jpg"/>
+                        </ImageView>
+                        <Label text="Nom de l'événement" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;"/>
+                        <Label text="Date: 02/01/2024" style="-fx-text-fill: #808080;"/>
+                        <Button text="Gérer" style="-fx-background-color: #E50914; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Section Statistiques -->
+            <VBox spacing="15">
+                <Label text="Statistiques" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;">
+                    <effect>
+                        <DropShadow color="#E50914" radius="5" spread="0.1"/>
+                    </effect>
+                </Label>
+                <HBox spacing="20">
+                    <VBox style="-fx-background-color: #1A1A1A; -fx-background-radius: 8px; -fx-padding: 20px; -fx-cursor: hand;" 
+                          minWidth="200">
+                        <Label text="Total Événements" style="-fx-text-fill: white; -fx-font-size: 18px;"/>
+                        <Label text="25" style="-fx-text-fill: #E50914; -fx-font-size: 36px; -fx-font-weight: bold;">
+                            <effect>
+                                <DropShadow color="#E50914" radius="10" spread="0.2"/>
+                            </effect>
+                        </Label>
+                    </VBox>
+                    <VBox style="-fx-background-color: #1A1A1A; -fx-background-radius: 8px; -fx-padding: 20px; -fx-cursor: hand;" 
+                          minWidth="200">
+                        <Label text="Participants" style="-fx-text-fill: white; -fx-font-size: 18px;"/>
+                        <Label text="1,234" style="-fx-text-fill: #E50914; -fx-font-size: 36px; -fx-font-weight: bold;">
+                            <effect>
+                                <DropShadow color="#E50914" radius="10" spread="0.2"/>
+                            </effect>
+                        </Label>
+                    </VBox>
+                    <VBox style="-fx-background-color: #1A1A1A; -fx-background-radius: 8px; -fx-padding: 20px; -fx-cursor: hand;" 
+                          minWidth="200">
+                        <Label text="Revenus" style="-fx-text-fill: white; -fx-font-size: 18px;"/>
+                        <Label text="€12,345" style="-fx-text-fill: #E50914; -fx-font-size: 36px; -fx-font-weight: bold;">
+                            <effect>
+                                <DropShadow color="#E50914" radius="10" spread="0.2"/>
+                            </effect>
+                        </Label>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Section Actions rapides -->
+            <VBox spacing="15">
+                <Label text="Actions rapides" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;">
+                    <effect>
+                        <DropShadow color="#E50914" radius="5" spread="0.1"/>
+                    </effect>
+                </Label>
+                <HBox spacing="20">
+                    <Button text="Créer un événement" style="-fx-background-color: #E50914; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 15px 30px; -fx-cursor: hand;"/>
+                    <Button text="Gérer les utilisateurs" style="-fx-background-color: #1A1A1A; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 15px 30px; -fx-cursor: hand;"/>
+                    <Button text="Voir les rapports" style="-fx-background-color: #1A1A1A; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 15px 30px; -fx-cursor: hand;"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</VBox> 

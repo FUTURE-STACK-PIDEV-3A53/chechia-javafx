@@ -89,4 +89,28 @@ public class EventDAO {
             logger.log(Level.SEVERE, "Error updating event with ID: " + event.getId(), e);
         }
     }
+
+    public Event findEventById(int id) {
+        String sql = "SELECT * FROM event WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Event(
+                        rs.getInt("id"),
+                        rs.getString("nom_event"),
+                        rs.getString("localisation_event"),
+                        rs.getString("date_event"),
+                        rs.getString("type"),
+                        rs.getDouble("montant"),
+                        rs.getInt("userID")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error finding event with ID: " + id, e);
+        }
+        return null;
+    }
 }

@@ -3,11 +3,15 @@ module org.example {
     requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.web;
-    requires javafx.media;
     requires java.sql;
     requires java.logging;
-    
-    opens org.example to javafx.fxml, javafx.graphics;
+    requires java.desktop;
+    requires itextpdf;
+    requires com.google.zxing;
+    requires com.google.zxing.javase;
+    requires jdk.jsobject;
+
+    opens org.example to javafx.fxml;
     opens org.example.controller to javafx.fxml;
     opens org.example.model to javafx.base;
     

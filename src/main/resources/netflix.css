@@ -1,0 +1,116 @@
+/* Netflix-inspired dark theme */
+
+.netflix-root {
+    -fx-background-color: #181818;
+}
+
+.netflix-topbar {
+    -fx-background-color: #181818;
+    -fx-padding: 18 32 18 32;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: #222;
+}
+
+.netflix-logo {
+    -fx-text-fill: #e50914;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Arial Black', Arial, sans-serif;
+}
+
+.netflix-logout {
+    -fx-background-color: transparent;
+    -fx-text-fill: #fff;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-border-color: #e50914;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-padding: 8 24;
+    -fx-cursor: hand;
+}
+.netflix-logout:hover {
+    -fx-background-color: #e50914;
+    -fx-text-fill: #fff;
+}
+
+.netflix-center {
+    -fx-padding: 30 40 30 40;
+}
+
+.netflix-section-title {
+    -fx-text-fill: #fff;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.netflix-carousel {
+    -fx-background: transparent;
+    -fx-padding: 0 0 20 0;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #333;
+}
+
+.netflix-carousel-hbox {
+    -fx-padding: 10 0 10 10;
+}
+
+.netflix-card {
+    -fx-background-color: #232323;
+    -fx-background-radius: 16px;
+    -fx-padding: 16 12 16 12;
+    -fx-effect: dropshadow(gaussian, #000, 8, 0.2, 0, 2);
+    -fx-border-color: #333;
+    -fx-border-radius: 16px;
+    -fx-spacing: 8;
+    -fx-alignment: center;
+}
+
+.netflix-card-title {
+    -fx-text-fill: #fff;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+    -fx-alignment: center;
+}
+
+.netflix-card-date, .netflix-card-location, .netflix-card-type, .netflix-card-price {
+    -fx-text-fill: #b3b3b3;
+    -fx-font-size: 13px;
+    -fx-alignment: center;
+}
+
+.netflix-card-btn {
+    -fx-background-color: #e50914;
+    -fx-text-fill: #fff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-padding: 6 18;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, #e50914, 4, 0.2, 0, 1);
+}
+.netflix-card-btn:hover {
+    -fx-background-color: #b0060f;
+}
+
+.netflix-table {
+    -fx-background-color: #232323;
+    -fx-table-cell-border-color: #333;
+    -fx-control-inner-background: #181818;
+    -fx-text-background-color: #fff;
+    -fx-font-size: 14px;
+    -fx-border-radius: 8px;
+    -fx-padding: 8;
+}
+
+.table-row-cell {
+    -fx-background-color: #232323;
+    -fx-text-fill: #fff;
+}
+
+.table-row-cell:filled:selected, .table-row-cell:focused:selected {
+    -fx-background-color: #e50914;
+    -fx-text-fill: #fff;
+} 

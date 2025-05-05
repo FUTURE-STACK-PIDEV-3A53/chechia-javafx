@@ -70,6 +70,48 @@
     -fx-background-color: #5a6268;
 }
 
+/* Search Button Styles */
+.search-button {
+    -fx-background-color: #1976d2;
+    -fx-text-fill: white;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 4px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.search-button:hover {
+    -fx-background-color: #1565c0;
+}
+
+/* Generate PDF Button Styles */
+.generate-pdf-button {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 4px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.generate-pdf-button:hover {
+    -fx-background-color: #1b5e20;
+}
+
+/* Generate QR Code Button Styles */
+.generate-qr-code-button {
+    -fx-background-color: #6c757d;
+    -fx-text-fill: white;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 4px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.generate-qr-code-button:hover {
+    -fx-background-color: #5a6268;
+}
+
 /* Form Field Styles */
 .text-field, .date-picker, .combo-box {
     -fx-background-color: white;
@@ -183,5 +225,42 @@
 .status-label {
     -fx-font-size: 13px;
     -fx-padding: 10px 0;
-    -fx-text-fill: #d32f2f;
-} 
+    -fx-text-fill: #f0f0f0;
+}
+
+/* Search Bar Styles */
+.search-bar {
+    -fx-padding: 10px;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 4px;
+    -fx-background-color: white;
+    -fx-text-fill: #333;
+}
+
+/* Calendar View Styles */
+.calendar-view {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 8px;
+    -fx-padding: 10px;
+}
+
+.calendar-day {
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
+    -fx-padding: 5px;
+    -fx-text-fill: #333;
+}
+
+.calendar-day:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+/* QR Code Display Styles */
+.qr-code {
+    -fx-padding: 10px;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 4px;
+    -fx-background-color: white;
+    -fx-alignment: center;
+}

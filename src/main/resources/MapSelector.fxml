@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.WebView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="org.example.controller.MapSelectorController"
+            style="-fx-background-color: #141414;">
+    
+    <top>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <Label text="Sélectionnez un lieu" style="-fx-text-fill: #E50914; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Rechercher un lieu..." 
+                          style="-fx-background-color: #333; -fx-text-fill: white; -fx-prompt-text-fill: #666;"
+                          HBox.hgrow="ALWAYS"/>
+                <Button text="Rechercher" onAction="#handleSearch"
+                        style="-fx-background-color: #E50914; -fx-text-fill: white;"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <WebView fx:id="webView" prefHeight="600" prefWidth="800"/>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
+            <Label fx:id="selectedLocationLabel" style="-fx-text-fill: white;"
+                   text="Aucun lieu sélectionné"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Annuler" onAction="#handleCancel"
+                    style="-fx-background-color: #333; -fx-text-fill: white;"/>
+            <Button text="Confirmer" onAction="#handleConfirm"
+                    style="-fx-background-color: #E50914; -fx-text-fill: white;"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane> 

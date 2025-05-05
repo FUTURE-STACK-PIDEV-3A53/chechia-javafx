@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controller.UserReservationsController" styleClass="netflix-root">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="netflix-topbar">
+            <Label text="Mes réservations" styleClass="netflix-logo" />
+            <Button onAction="#handleToggleTheme" styleClass="netflix-logout" text="Thème" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button text="Fermer" onAction="#handleClose" styleClass="netflix-logout" />
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="30" alignment="TOP_CENTER" styleClass="netflix-center">
+            <TableView fx:id="reservationTable" styleClass="netflix-table" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="reservationEventColumn" text="Événement" />
+                    <TableColumn fx:id="reservationNbColumn" text="Personnes" />
+                    <TableColumn fx:id="reservationTelColumn" text="Téléphone" />
+                    <TableColumn fx:id="reservationActionColumn" text="Action" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane> 

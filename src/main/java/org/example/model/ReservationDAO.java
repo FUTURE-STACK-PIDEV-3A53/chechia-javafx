@@ -21,26 +21,47 @@ public class ReservationDAO {
      * @return true si l'ajout a réussi, false sinon
      */
     public boolean ajouterReservation(Reservation reservation) {
-        String sql = "INSERT INTO reservation (event_id, user_id, nombre_personnes, date_reservation) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO reservation (event_id, userID, nb_personne, num_tel) VALUES (?, ?, ?, ?)";
         
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
+        System.out.println("Exécution de la requête SQL: " + sql);
+        System.out.println("Valeurs à insérer:");
+        System.out.println("  event_id: " + reservation.getEvent_id());
+        System.out.println("  userID: " + reservation.getUserID());
+        System.out.println("  nb_personne: " + reservation.getNb_personne());
+        System.out.println("  num_tel: " + reservation.getNum_tel());
+        
+        try (Connection conn = DBConnection.getConnection()) {
             if (conn == null) {
                 logger.log(Level.SEVERE, "Échec de connexion à la base de données");
+                System.out.println("ERREUR CRITIQUE: Impossible de se connecter à la base de données");
                 return false;
             }
             
-            stmt.setInt(1, reservation.getEventId());
-            stmt.setInt(2, reservation.getUserId());
-            stmt.setInt(3, reservation.getNombrePersonnes());
-            stmt.setString(4, reservation.getDateReservation());
+            System.out.println("Connexion à la base de données établie avec succès");
             
-            int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
-            
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, reservation.getEvent_id());
+                stmt.setInt(2, reservation.getUserID());
+                stmt.setInt(3, reservation.getNb_personne());
+                stmt.setString(4, reservation.getNum_tel());
+                
+                System.out.println("Requête préparée: " + stmt.toString());
+                
+                int rowsInserted = stmt.executeUpdate();
+                System.out.println("Résultat de l'exécution: " + rowsInserted + " lignes insérées");
+                return rowsInserted > 0;
+            }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erreur lors de l'ajout d'une réservation", e);
+            System.out.println("ERREUR SQL: " + e.getMessage());
+            System.out.println("Code SQL State: " + e.getSQLState());
+            System.out.println("Code erreur vendeur: " + e.getErrorCode());
+            e.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Exception non SQL lors de l'ajout d'une réservation", e);
+            System.out.println("EXCEPTION NON SQL: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -59,17 +80,18 @@ public class ReservationDAO {
             
             while (rs.next()) {
                 Reservation reservation = new Reservation(
-                    rs.getInt("id"),
+                    rs.getInt("reservation_id"),
                     rs.getInt("event_id"),
-                    rs.getInt("user_id"),
-                    rs.getInt("nombre_personnes"),
-                    rs.getString("date_reservation")
+                    rs.getInt("userID"),
+                    rs.getInt("nb_personne"),
+                    rs.getString("num_tel")
                 );
                 liste.add(reservation);
             }
             
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erreur lors de la récupération des réservations", e);
+            e.printStackTrace();
         }
         return liste;
     }
@@ -80,33 +102,81 @@ public class ReservationDAO {
      * @return true si la mise à jour a réussi, false sinon
      */
     public boolean modifierReservation(Reservation reservation) {
-        String sql = "UPDATE reservation SET event_id = ?, user_id = ?, nombre_personnes = ?, date_reservation = ? WHERE id = ?";
+        // Requête SQL selon l'ordre indiqué par l'utilisateur
+        String sql = "UPDATE reservation SET event_id = ?, num_tel = ?, nb_personne = ?, userID = ? WHERE reservation_id = ?";
+        
+        System.out.println("Exécution de la requête SQL: " + sql);
+        System.out.println("Valeurs à mettre à jour:");
+        System.out.println("  event_id: " + reservation.getEvent_id());
+        System.out.println("  num_tel: " + reservation.getNum_tel());
+        System.out.println("  nb_personne: " + reservation.getNb_personne());
+        System.out.println("  userID: " + reservation.getUserID());
+        System.out.println("  reservation_id: " + reservation.getReservation_id());
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setInt(1, reservation.getEventId());
-            stmt.setInt(2, reservation.getUserId());
-            stmt.setInt(3, reservation.getNombrePersonnes());
-            stmt.setString(4, reservation.getDateReservation());
-            stmt.setInt(5, reservation.getId());
+            // Paramètres dans l'ordre spécifié
+            stmt.setInt(1, reservation.getEvent_id());
+            stmt.setString(2, reservation.getNum_tel());
+            stmt.setInt(3, reservation.getNb_personne());
+            stmt.setInt(4, reservation.getUserID());
+            stmt.setInt(5, reservation.getReservation_id());
+            
+            System.out.println("Requête préparée: " + stmt.toString());
             
             int rowsUpdated = stmt.executeUpdate();
+            System.out.println("Résultat de l'exécution: " + rowsUpdated + " lignes mises à jour");
             return rowsUpdated > 0;
             
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Erreur lors de la modification de la réservation ID: " + reservation.getId(), e);
+            logger.log(Level.SEVERE, "Erreur lors de la modification de la réservation ID: " + reservation.getReservation_id(), e);
+            System.out.println("ERREUR SQL: " + e.getMessage());
+            System.out.println("Code SQL State: " + e.getSQLState());
+            System.out.println("Code erreur vendeur: " + e.getErrorCode());
+            e.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Exception non SQL lors de la modification de la réservation", e);
+            System.out.println("EXCEPTION NON SQL: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
     
     /**
-     * Supprime une réservation par son ID
+     * Supprime une réservation par le nombre de personnes
+     * @param nbPersonne Le nombre de personnes de la réservation à supprimer
+     * @return true si la suppression a réussi, false sinon
+     */
+    public boolean supprimerReservation(int nbPersonne) {
+        String sql = "DELETE FROM reservation WHERE nb_personne = ?";
+        
+        System.out.println("Suppression des réservations avec " + nbPersonne + " personne(s)");
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, nbPersonne);
+            
+            int rowsDeleted = stmt.executeUpdate();
+            System.out.println(rowsDeleted + " réservation(s) supprimée(s)");
+            return rowsDeleted > 0;
+            
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Erreur lors de la suppression des réservations avec " + nbPersonne + " personne(s)", e);
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    /**
+     * Supprime une réservation par son ID (méthode conservée pour compatibilité)
      * @param id L'ID de la réservation à supprimer
      * @return true si la suppression a réussi, false sinon
      */
-    public boolean supprimerReservation(int id) {
-        String sql = "DELETE FROM reservation WHERE id = ?";
+    public boolean supprimerReservationParId(int id) {
+        String sql = "DELETE FROM reservation WHERE reservation_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -118,6 +188,7 @@ public class ReservationDAO {
             
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erreur lors de la suppression de la réservation ID: " + id, e);
+            e.printStackTrace();
             return false;
         }
     }
@@ -128,7 +199,7 @@ public class ReservationDAO {
      * @return La réservation si trouvée, null sinon
      */
     public Reservation trouverReservationParId(int id) {
-        String sql = "SELECT * FROM reservation WHERE id = ?";
+        String sql = "SELECT * FROM reservation WHERE reservation_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -138,19 +209,56 @@ public class ReservationDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Reservation(
-                        rs.getInt("id"),
+                        rs.getInt("reservation_id"),
                         rs.getInt("event_id"),
-                        rs.getInt("user_id"),
-                        rs.getInt("nombre_personnes"),
-                        rs.getString("date_reservation")
+                        rs.getInt("userID"),
+                        rs.getInt("nb_personne"),
+                        rs.getString("num_tel")
                     );
                 }
             }
             
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Erreur lors de la recherche de la réservation ID: " + id, e);
+            e.printStackTrace();
         }
         
         return null;
+    }
+    
+    /**
+     * Met à jour toutes les réservations ayant un certain nombre de personnes
+     * @param oldNbPersonne L'ancien nombre de personnes (critère de recherche)
+     * @param reservation La réservation modifiée avec les nouvelles valeurs
+     * @return true si la mise à jour a réussi, false sinon
+     */
+    public boolean modifierReservationParNbPersonne(int oldNbPersonne, Reservation reservation) {
+        String sql = "UPDATE reservation SET event_id = ?, userID = ?, nb_personne = ?, num_tel = ? WHERE nb_personne = ?";
+        
+        System.out.println("Mise à jour des réservations avec " + oldNbPersonne + " personne(s)");
+        System.out.println("Nouvelles valeurs: ");
+        System.out.println("  event_id: " + reservation.getEvent_id());
+        System.out.println("  userID: " + reservation.getUserID());
+        System.out.println("  nb_personne: " + reservation.getNb_personne());
+        System.out.println("  num_tel: " + reservation.getNum_tel());
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, reservation.getEvent_id());
+            stmt.setInt(2, reservation.getUserID());
+            stmt.setInt(3, reservation.getNb_personne());
+            stmt.setString(4, reservation.getNum_tel());
+            stmt.setInt(5, oldNbPersonne);
+            
+            int rowsUpdated = stmt.executeUpdate();
+            System.out.println(rowsUpdated + " réservation(s) mise(s) à jour");
+            return rowsUpdated > 0;
+            
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Erreur lors de la modification des réservations avec " + oldNbPersonne + " personne(s)", e);
+            e.printStackTrace();
+            return false;
+        }
     }
 } 
