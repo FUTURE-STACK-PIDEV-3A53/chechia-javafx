@@ -7,21 +7,22 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.controller.ChatBotController"
-      spacing="10"
-      style="-fx-background-color: #F5F5F5;">
+      styleClass="chat-container"
+      spacing="10">
     
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
     
-    <Label text="Assistant chatbot" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <Label text="Assistant chatbot" styleClass="chat-title"/>
+    <Label text="Posez vos questions sur le jeu" styleClass="chat-subtitle"/>
     
-    <ScrollPane fx:id="scrollPane" VBox.vgrow="ALWAYS" fitToWidth="true">
-        <VBox fx:id="chatBox" spacing="10"/>
+    <ScrollPane fx:id="scrollPane" styleClass="chat-scroll-pane" VBox.vgrow="ALWAYS" fitToWidth="true">
+        <VBox fx:id="chatBox" styleClass="chat-messages" spacing="10"/>
     </ScrollPane>
     
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <TextField fx:id="messageInput" HBox.hgrow="ALWAYS" promptText="Tapez votre message ici..."/>
-        <Button fx:id="sendButton" text="Envoyer" onAction="#handleSendMessage"/>
+    <HBox styleClass="chat-input-container" spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="messageInput" styleClass="chat-input-field" HBox.hgrow="ALWAYS" promptText="Tapez votre message ici..."/>
+        <Button fx:id="sendButton" styleClass="send-button" text="Envoyer" onAction="#handleSendMessage"/>
     </HBox>
 </VBox> 

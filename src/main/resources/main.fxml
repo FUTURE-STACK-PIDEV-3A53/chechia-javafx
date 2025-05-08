@@ -14,6 +14,7 @@
         <Label text="Navigation" styleClass="navigation-title"/>
         <Button fx:id="manageGamesBtn" text="Manage Games" styleClass="navigation-button" onAction="#showGameList"/>
         <Button fx:id="manageRoomsBtn" text="Manage Game Rooms" styleClass="navigation-button" onAction="#showGameRoomList"/>
+        <Button fx:id="chatBotButton" text="Assistant" styleClass="navigation-button" onAction="#showChatBot"/>
     </VBox>
 
     <!-- Main Content Area -->

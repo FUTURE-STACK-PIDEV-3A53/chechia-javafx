@@ -126,7 +126,13 @@ public class GameRoomListController {
             }
         });
         
-        // Hide admin buttons initially
+        // Ensure admin button is visible
+        if (adminButton != null) {
+            adminButton.setVisible(true);
+            adminButton.setManaged(true);
+        }
+        
+        // Hide CRUD buttons initially
         setAdminButtonsVisible(false);
     }
 

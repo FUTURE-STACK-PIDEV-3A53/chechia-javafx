@@ -24,6 +24,7 @@ public class ChatBotController implements Initializable {
     private ScrollPane scrollPane;
 
     private OpenRouterClient openRouterClient;
+    private final Color PRIMARY_COLOR = Color.web("#e74c3c");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,15 +68,13 @@ public class ChatBotController implements Initializable {
     private void addMessage(String sender, String message, boolean isUser) {
         TextFlow textFlow = new TextFlow();
         textFlow.setPadding(new Insets(5, 10, 5, 10));
-        textFlow.setStyle("-fx-background-color: " + (isUser ? "#DCF8C6" : "#FFFFFF") + "; " +
-                         "-fx-background-radius: 10; " +
-                         "-fx-border-radius: 10; " +
-                         "-fx-border-color: #E0E0E0; " +
-                         "-fx-border-width: 1;");
+        textFlow.getStyleClass().add("message-bubble");
+        textFlow.getStyleClass().add(isUser ? "user-message" : "bot-message");
 
         Text senderText = new Text(sender + ": ");
-        senderText.setFill(Color.GRAY);
+        senderText.setFill(isUser ? Color.WHITE : PRIMARY_COLOR);
         Text messageText = new Text(message);
+        messageText.setFill(isUser ? Color.WHITE : PRIMARY_COLOR);
         
         textFlow.getChildren().addAll(senderText, messageText);
         chatBox.getChildren().add(textFlow);

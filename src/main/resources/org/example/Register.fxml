@@ -3,27 +3,38 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx"
+<VBox alignment="CENTER" spacing="20" styleClass="content-area" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.controller.RegisterController"
       stylesheets="@styles.css">
     
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0"/>
     </padding>
 
-    <Label text="Register" styleClass="title-label"/>
-
-    <TextField fx:id="usernameField" promptText="Username" styleClass="text-field"/>
-    <TextField fx:id="emailField" promptText="Email" styleClass="text-field"/>
-    <PasswordField fx:id="passwordField" promptText="Password" styleClass="text-field"/>
-    <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" styleClass="text-field"/>
-    
-    <Label fx:id="errorLabel" styleClass="error-label"/>
-    
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="registerButton" text="Register" onAction="#handleRegister" styleClass="primary-button"/>
-        <Button fx:id="backButton" text="Back to Login" onAction="#handleBack" styleClass="secondary-button"/>
-    </HBox>
+    <VBox styleClass="form-container" maxWidth="400" spacing="20">
+        <Label text="Créer un compte" styleClass="title-label">
+            <font>
+                <Font size="32.0"/>
+            </font>
+        </Label>
+        
+        <Label text="Rejoignez notre communauté de joueurs" styleClass="subtitle-label"/>
+        
+        <TextField fx:id="usernameField" promptText="Nom d'utilisateur" styleClass="form-field"/>
+        <TextField fx:id="emailField" promptText="Email" styleClass="form-field"/>
+        <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="form-field"/>
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe" styleClass="form-field"/>
+        
+        <Label fx:id="errorLabel" styleClass="error-label"/>
+        
+        <Button fx:id="registerButton" text="S'inscrire" onAction="#handleRegister" styleClass="primary-button" maxWidth="Infinity"/>
+        
+        <HBox spacing="10" alignment="CENTER">
+            <Label text="Déjà un compte ?"/>
+            <Button fx:id="backButton" text="Se connecter" onAction="#handleBack" styleClass="link-button"/>
+        </HBox>
+    </VBox>
 </VBox> 

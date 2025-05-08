@@ -37,12 +37,11 @@
         <Button fx:id="playButton" text="Jouer" onAction="#handlePlayGame" styleClass="action-button"/>
         <Button fx:id="rankingsButton" text="Classements" onAction="#handleShowRankings" styleClass="info-button"/>
         <Button fx:id="suggestionsButton" text="Suggestions" onAction="#handleShowSuggestions" styleClass="info-button"/>
-        <Button fx:id="chatBotButton" text="Assistant" onAction="#handleChatBot" styleClass="info-button"/>
         <Button fx:id="downloadPDFButton" text="Télécharger PDF" onAction="#handleDownloadPDF" styleClass="info-button"/>
-        <Button fx:id="adminButton" text="Admin" onAction="#handleAdminAccess" styleClass="admin-button" visible="false"/>
-        <Button fx:id="addButton" text="Add Room" onAction="#handleAddGameRoom" styleClass="primary-button"/>
-        <Button fx:id="editButton" text="Edit Room" onAction="#handleEditRoom" styleClass="primary-button"/>
-        <Button fx:id="deleteButton" text="Delete Room" onAction="#handleDeleteRoom" styleClass="danger-button"/>
+        <Button fx:id="adminButton" text="Admin" onAction="#handleAdminAccess" styleClass="admin-button"/>
+        <Button fx:id="addButton" text="Add Room" onAction="#handleAddGameRoom" styleClass="primary-button" visible="false"/>
+        <Button fx:id="editButton" text="Edit Room" onAction="#handleEditRoom" styleClass="primary-button" visible="false"/>
+        <Button fx:id="deleteButton" text="Delete Room" onAction="#handleDeleteRoom" styleClass="danger-button" visible="false"/>
     </HBox>
     
     <stylesheets>

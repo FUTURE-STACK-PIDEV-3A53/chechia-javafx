@@ -19,7 +19,7 @@ public class OpenRouterClient {
     public String sendMessage(String message) throws Exception {
         JSONObject requestBody = new JSONObject();
         requestBody.put("model", "anthropic/claude-3-opus-20240229");
-        requestBody.put("max_tokens", 500);
+        requestBody.put("max_tokens", 400);
         
         JSONArray messages = new JSONArray();
         JSONObject systemMessage = new JSONObject();

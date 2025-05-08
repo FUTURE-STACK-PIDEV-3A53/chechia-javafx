@@ -7,9 +7,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 import java.io.IOException;
 import org.example.model.User;
 import org.example.utils.SessionManager;
+import javafx.scene.control.Alert;
 
 public class MainController {
     @FXML
@@ -86,5 +90,30 @@ public class MainController {
             e.printStackTrace();
             // Show error alert
         }
+    }
+
+    @FXML
+    private void showChatBot() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/chatBot.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Assistant de Jeu");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'interface du chatbot.");
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

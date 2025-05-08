@@ -6,8 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="60a68a6f-9550-4498-ad5a-c01707ac6300" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/db/TestDBConnection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/ChatBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/ChatBotController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/GameRoomListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/GameRoomListController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/Login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/Login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/Register.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/Register.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/chatBot.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/chatBot.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/gameRoomList.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/gameRoomList.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,23 +33,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.chachiaPI.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "amine",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/minot/chachiaPI",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/minot/chachiaPI/src/main/java/org/example/Main.java",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.chachiaPI.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;amine&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/minot/chachiaPI&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/minot/chachiaPI/src/main/java/org/example/Main.java&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="jbr-17" />
@@ -101,6 +108,7 @@
       <updated>1744894031321</updated>
       <workItem from="1744894032835" duration="3952000" />
       <workItem from="1744978539962" duration="2914000" />
+      <workItem from="1746195743422" duration="1180000" />
     </task>
     <servers />
   </component>
