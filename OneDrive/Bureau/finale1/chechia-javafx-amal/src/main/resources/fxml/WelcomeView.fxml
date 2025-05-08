@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.mila.controller.WelcomeController"
+      spacing="20" alignment="CENTER" styleClass="welcome-container">
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+    
+    <stylesheets>
+        <URL value="@/styles/styles.css"/>
+    </stylesheets>
+    
+    <Label fx:id="welcomeTitleLabel" text="Bienvenue sur Chechia" styleClass="welcome-title"/>
+    
+    <VBox spacing="15" alignment="CENTER" styleClass="description-container">
+        <Label fx:id="subtitleLabel" text="Une plateforme tunisienne innovante" styleClass="subtitle"/>
+        <TextFlow textAlignment="CENTER" styleClass="description-text">
+            <Text fx:id="descriptionText" text="Chechia est conçue pour promouvoir la richesse culturelle tunisienne tout en favorisant les échanges sociaux et intellectuels entre ses utilisateurs. Notre plateforme représente un carrefour numérique de partage, de découverte et d'interaction, profondément ancré dans les valeurs et traditions tunisiennes." wrappingWidth="600"/>
+        </TextFlow>
+    </VBox>
+    
+    <HBox spacing="20" alignment="CENTER">
+        <Button fx:id="adminButton" text="Espace Administrateur" onAction="#handleAdminLogin" styleClass="admin-button"/>
+        <Button fx:id="userButton" text="Espace Utilisateur" onAction="#handleUserAccess" styleClass="user-button"/>
+        <Button fx:id="translateButton" text="Traduire en Anglais" onAction="#handleTranslate" styleClass="translate-button"/>
+        <Button fx:id="testChatbotButton" text="Tester le Chatbot" onAction="#handleTestChatbot" styleClass="chatbot-button"/>
+    </HBox>
+
+    <VBox spacing="10" alignment="CENTER">
+        <Button fx:id="manageProgramsButton" text="Gérer les Programmes" onAction="#handleManagePrograms" 
+                styleClass="action-button"/>
+        <Button fx:id="viewPostulationsButton" text="Mes Postulations" onAction="#handleViewPostulations"
+                styleClass="action-button"/>
+    </VBox>
+</VBox>

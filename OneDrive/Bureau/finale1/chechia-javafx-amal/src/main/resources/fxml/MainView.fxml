@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.mila.controller.MainController"
+            prefHeight="600.0" prefWidth="800.0">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Gestion des Programmes d'Échange" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <PieChart fx:id="nationalityChart" title="Répartition des programmes par nationalité" 
+                      prefWidth="600" prefHeight="400" minWidth="500" minHeight="350" />
+        </VBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+            <VBox spacing="5">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets top="5" right="5" bottom="5" left="5"/>
+                    </padding>
+                    <Label text="Programmes d'Échange" style="-fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button text="Ajouter" onAction="#handleAddProgramme" />
+                    <Button text="Modifier" onAction="#handleEditProgramme" />
+                    <Button text="Supprimer" onAction="#handleDeleteProgramme" />
+                </HBox>
+                <TableView fx:id="tableProgrammes" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colNomProgramme" text="Nom du Programme" prefWidth="200"/>
+                        <TableColumn fx:id="colType" text="Type" prefWidth="100"/>
+                        <TableColumn fx:id="colNationalite" text="Nationalité" prefWidth="100"/>
+                        <TableColumn fx:id="colDuree" text="Durée (mois)" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+            
+            <VBox spacing="5">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets top="5" right="5" bottom="5" left="5"/>
+                    </padding>
+                    <Label text="Postulations" style="-fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button text="Ajouter" onAction="#handleAddPostulation" />
+                    <Button text="Modifier" onAction="#handleEditPostulation" />
+                    <Button text="Supprimer" onAction="#handleDeletePostulation" />
+                </HBox>
+                <TableView fx:id="tablePostulations" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colNom" text="Nom" prefWidth="100"/>
+                        <TableColumn fx:id="colPrenom" text="Prénom" prefWidth="100"/>
+                        <TableColumn fx:id="colAge" text="Âge" prefWidth="50"/>
+                        <TableColumn fx:id="colEmail" text="Email" prefWidth="200"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </SplitPane>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="© 2023 - Application de Gestion des Programmes d'Échange"/>
+        </HBox>
+    </bottom>
+</BorderPane>

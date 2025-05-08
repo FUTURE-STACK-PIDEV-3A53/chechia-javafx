@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+<?import javafx.scene.chart.PieChart?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.mila.controller.AdminController"
+      styleClass="admin-container" spacing="20">
+    
+    <stylesheets>
+        <URL value="@../styles/styles.css"/>
+    </stylesheets>
+    
+    <padding>
+        <Insets top="20" right="30" bottom="20" left="30"/>
+    </padding>
+    
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Button fx:id="backButton" text="Retour" onAction="#handleBack" styleClass="back-button"/>
+        <Label fx:id="adminTitleLabel" text="Gestion des Programmes d'Échange" styleClass="admin-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="addProgramHeaderButton" text="Ajouter un Programme" onAction="#handleAddProgram" styleClass="primary-button"/>
+        <Button fx:id="exportPDFButton" text="Exporter PDF" onAction="#handleExportPDF" styleClass="secondary-button"/>
+        <Button fx:id="translateButton" text="Traduire en Anglais" onAction="#handleTranslate" styleClass="secondary-button"/>
+    </HBox>
+    
+    
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher un programme..." HBox.hgrow="ALWAYS" styleClass="form-field"/>
+        <ComboBox fx:id="filterType" promptText="Type de programme" styleClass="form-field"/>
+        <ComboBox fx:id="filterNationality" promptText="Nationalité" styleClass="form-field"/>
+        <Button fx:id="searchButton" text="Rechercher" onAction="#handleSearch" styleClass="secondary-button"/>
+        <Button fx:id="addProgramButton2" text="Ajouter un programme" onAction="#handleAddProgram" styleClass="add-button"/>
+    </HBox>
+    
+    <HBox spacing="20" alignment="CENTER">
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="chart-container">
+            <Label text="Répartition :" styleClass="chart-title"/>
+            <PieChart fx:id="programTypeChart" title="" legendVisible="true" labelsVisible="true" 
+                      prefWidth="600" prefHeight="400" minWidth="500" minHeight="350" />
+        </VBox>
+    </HBox>
+    
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="program-scroll">
+        <FlowPane fx:id="programContainer" hgap="20" vgap="20">
+            <!-- Les cartes de programme seront ajoutées dynamiquement ici -->
+            <!-- Les cartes de programme seront ajoutées ici dynamiquement -->
+        </FlowPane>
+    </ScrollPane>
+</VBox>
